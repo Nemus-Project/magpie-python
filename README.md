@@ -21,4 +21,11 @@ Elastic boundary conditions adjustable both in torsional $R$ stiffness and trans
     - density
 - through the browser
 
+## Dependencies
+
+### MATLAB
+
+- fastsmooth [(Fast smoothing function Version 2.0.0.0 (52.4 KB) by Tom O'Haver)](https://it.mathworks.com/matlabcentral/fileexchange/19998-fast-smoothing-function)
+- Symbolic Math Toolbox
+
 ## References
