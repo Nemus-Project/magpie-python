@@ -194,17 +194,17 @@ for nPl = 1 : 3
         %-- DONT TOUCH BELOW
 
         %-- load signals
-        [H1ACC1,fs]    = audioread('300623_COPPER PLATE_H1ACC1.wav') ;
+        [H1ACC1,fs]    = audioread('audio/300623_COPPER PLATE_H1ACC1.wav') ;
         H1ACC1         = H1ACC1(:,1) ;
         TsExp          = length(H1ACC1) ;
         hann2          = hamming(TsExp) ;
         H1ACC1         = H1ACC1.* hamming(TsExp) ;
 
-        [H2ACC1,~]     = audioread('300623_COPPER PLATE_H2ACC1.wav') ;
+        [H2ACC1,~]     = audioread('audio/300623_COPPER PLATE_H2ACC1.wav') ;
         H2ACC1         = H2ACC1(:,1) ;
         H2ACC1         = H2ACC1.* hamming(TsExp) ;
 
-        [H3ACC1,~]     = audioread('300623_COPPER PLATE_H3ACC1.wav') ;
+        [H3ACC1,~]     = audioread('audio/300623_COPPER PLATE_H3ACC1.wav') ;
         H3ACC1         = H3ACC1(:,1) ;
         H3ACC1         = H3ACC1.* hamming(TsExp) ;
 
