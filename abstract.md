@@ -20,7 +20,7 @@ Max: 200 words
 ## Main Abstract
 
 Online their exist tools for deriving modes for physical acoustic system but rarely are they extensive and open source. The Eigen Plate project differs in it's aim to not only be accessible but also transparent and free open source software. The Eigen Plate is software developed as part of the Numerical Restoration of Historical Musical Instruments [NEMUS] project. Part of the NEMUS project remit is developing projects for the digital simulation and conservation of historic musical instruments. Eigen Plate is derived from an in-house, MATLAB source, tool developed for deriving mode shapes and mode frequencies for a parametric isotropic thin plate. Parameters for the plate model are width, length, thickness, density, young's modulus, poisson ratio and elastically constrained boundary conditions. Interactive elements provide a more intuitive approach to parameter exploration.
-
+<!-- summarize width/length/thickness etc... into something like "physical properties", then I guess you could be more specific into the paper -->
 Using current, open-source, non-proprietary development platforms Eigen Plate allows for easy access an exploration of parameters of a thin plate mode and their effect on mode shapes and frequencies. 
 
 Obtaining mode shapes for plates can provide useful way for instrument makers to further understand the material with which they are working. Eigen Plate aims to also make conceptualising concepts such as mode patterns to a wider audience and has potential as a research tool for curators of musical instrument collections as well as creative tool for artists.
