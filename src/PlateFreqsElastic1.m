@@ -418,8 +418,8 @@ V = V(:,indSort) ;
 
 freqs = sqrt(abs(diag(Df)))*sqrt(D/rho/Lz)/2/pi ;
 
-digits(4) ;
-vpa(freqs)
+fprintf('--- Modal Freqs (Hz) ---\n', freqs)
+fprintf('%.1f\n', freqs)
 
 if Nmodes > 8
     colormap('parula') ;
