@@ -32,6 +32,9 @@ Obtaining mode shapes for plates can provide useful way for instrument makers to
 Maybe make it one sentence to describe NEMUS ?
 
 
+"Obtaining mode shapes for plates can provide useful way for instrument makers to further understand the material with which they are working. Eigen Plate aims to also make conceptualising concepts such as mode patterns to a wider audience and has potential as a research tool for curators of musical instrument collections as well as creative tool for artists." This on is really good and you shan't change it
+
+
 
 
 -->
