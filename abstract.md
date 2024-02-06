@@ -25,6 +25,17 @@ Using current, open-source, non-proprietary development platforms Eigen Plate al
 
 Obtaining mode shapes for plates can provide useful way for instrument makers to further understand the material with which they are working. Eigen Plate aims to also make conceptualising concepts such as mode patterns to a wider audience and has potential as a research tool for curators of musical instrument collections as well as creative tool for artists.
 
+<!--Online their exist tools for deriving modes for physical acoustic system but rarely are they extensive and open source." I would write "There exist online tools"}
+
+"The Eigen Plate is software developed as part of the Numerical Restoration of Historical Musical Instruments [NEMUS] project. Part of the NEMUS project remit is developing projects for the digital simulation and conservation of historic musical instruments. "
+
+Maybe make it one sentence to describe NEMUS ?
+
+
+
+
+-->
+
 
 ## Transcript
 
