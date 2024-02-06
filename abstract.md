@@ -13,7 +13,7 @@ Max: 200 words
 ## Main Abstract
 
     There exist online tools for deriving modes for physical acoustic system, but they are rarely extensive 
-and open source. Our goal is to create a tool that is accessible, easy to use and free open source software.
+and open source. Our goal (\SDcomment: maybe "The aim of this project" instead?) is to create a tool that is accessible, easy to use and free open source software.
 EigenPlate is software developed as part of the Numerical Restoration of Historical Musical Instruments
 [NEMUS] project. EigenPlate is derived from a MATLAB source tool developed to derive mode shapes and mode
 frequencies from parameterised physical properties of an isotropic thin plate.
