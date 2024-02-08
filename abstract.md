@@ -35,14 +35,18 @@ scientists and musical instrument builders.
 
 PlateVibe: a web-based, open-source interactive tool for plate vibration simulation
 
-The analysis and simulation of plate vibration are central to many branches of science and engineering,
-including acoustics and musical acoustics. Well-developed plate theories exist, along with 
-numerous simulation software packages. These, however, are seldom available in open-source form and, hence, 
-are not easily accessible to a greater audience. This work presents a novel finite difference scheme
-for plates under general elastic boundary supports. In this framework, one can assess the effects of the 
-elastic supports on the eigenfrequencies and modal shapes and retrieve the free, clamped, and simply supported 
-boundary conditions as limiting cases. 
-An interactive, free and open-source (pyhton-based?) web app is developed 
-supporting several functionalities (we should spend a couple of words describing the kind of functionalities we offer). 
-PlateVibe (name can change) offers reliable alternative to simulate elastic plate vibration, and is a powerful research tool for students, scientists, and musical instrument builders.
+The analysis and simulation of plate vibration are central to many branches of
+science and engineering, including acoustics and musical acoustics.
+Well-developed plate theories exist, along with numerous simulation software
+packages. These, however, are seldom available in open-source form and, hence,
+are not easily accessible to a greater audience. This work presents a novel
+finite difference scheme for plates under general elastic boundary supports. In
+this framework, one can assess the effects of the elastic supports on the
+eigenfrequencies and modal shapes and retrieve the free, clamped, and simply
+supported boundary conditions as limiting cases. An interactive, free and
+open-source (pyhton-based?) web app is developed supporting several
+functionalities (we should spend a couple of words describing the kind of
+functionalities we offer). PlateVibe (name can change) offers reliable
+alternative to simulate elastic plate vibration, and is a powerful research tool
+for students, scientists, and musical instrument builders.
 
