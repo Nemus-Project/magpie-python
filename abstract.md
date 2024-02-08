@@ -12,7 +12,7 @@ Max: 200 words
 
 ## Main Abstract
 
-MAGPIE: a web-based, open-source interactive framework for plate vibration analysis
+MAGPIE: a web-based, open-source framework for plate vibration analysis
 
 The analysis and simulation of plate vibrations are central to many branches of
 science and engineering, specifically acoustics and musical acoustics.
