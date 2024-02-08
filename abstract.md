@@ -21,12 +21,15 @@ accessible to a greater audience.
 XX is a framework for interacting with a novel finite difference scheme for
 plates under general elastic boundary conditions. Free, clamped, and simply
 supported boundary conditions are obtainable by setting stiffness coefficients
-to very small or large values.
+to very small or large values. Boundary conditions are parameterised which allow
+for intermediate possibilities.
 
 A web browser based implementation of the framework includes interactive
-elements, which offer a more intuitive approach to parameter exploration. Users
-begin by providing parameters for an isotropic plate. These parameters are then
-used to generate visualisations of the mode shapes.
+elements. Users begin by providing parameters for an isotropic plate. These
+parameters are then used to generate visualisations of the mode shapes from the
+finite difference scheme simulation. Elastic boundary conditions can then be
+changed on a continuous scale to see their effect on mode shapes. Results are
+then available for export in common image and data formats.
 
 XX aims to make it easier to explain concepts such as mode shapes to a wider
 audience and also provide a tool for research that is accessible to students,
