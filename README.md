@@ -23,7 +23,7 @@ Elastic boundary conditions adjustable both in torsional $R$ stiffness and trans
       - modal patterns
       - in 2D
         - with a colour map
-      - or with simple node lines
+        - or with simple node lines
       - in 3D 
         - ThreeJS interface
         - adjustable camera
@@ -36,8 +36,10 @@ Elastic boundary conditions adjustable both in torsional $R$ stiffness and trans
       - Modal frequencies
   - Audio
     - Impulse response from a FDTD simulation of the plate
+    - Pure tones of eigen frequencies
   - Plots
-    - plot fre
+    - plot frequency of IR against Eigen Frequencies
+    - sonify tones of eigen frequencies
 
 ## Goals
 
