@@ -411,7 +411,7 @@ biHarm = biHarm/h^4 ;
 
 % EIGENVALUES
 
-[V,Df] = eigs(biHarm,Nmodes,'smallestabs') ;
+[V,Df] = eigs(biHarm,Nmodes,'smallestabs') ; % V is eigenvectors and Df is eigen values
 [~,indSort] = sort(diag((Df))) ;
 V = V(:,indSort) ;
 
