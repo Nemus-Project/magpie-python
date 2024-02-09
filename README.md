@@ -1,4 +1,4 @@
-# Finite Difference Plate
+# magpie
 
 ## About
 
