@@ -6,6 +6,36 @@ Finite Difference implementation of a stiff plate with adjustable boundary condi
 
 Elastic boundary conditions adjustable both in torsional $R$ stiffness and transversal stiffness $K$
 
+## Functionality
+
+- Inputs
+  - Material
+    - from a data set of coefficients from literature  
+      - named
+      - or set range manually
+  - Continuous scale for elastic boundary conditions
+- Outputs
+  - Image (or series)
+    - downloadable in common formats (jpg, png)
+      - modal patterns
+      - in 2D
+        - with a colour map
+      - or with simple node lines
+      - in 3D 
+        - ThreeJS interface
+        - adjustable camera
+    - Cached Results
+      - slide across scale of elastic conditions and Young's
+  - data as text / common data exchange formats (csv / tsv / JSON)
+    - input paremeters
+      - across a scale Young's moduli
+    - derived coefficients
+      - Modal frequencies
+  - Audio
+    - Impulse response from a FDTD simulation of the plate
+  - Plots
+    - plot fre
+
 ## Goals
 
 - create an interface for user to explore parameters
