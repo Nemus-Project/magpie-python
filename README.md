@@ -1,4 +1,7 @@
-# magpie
+<img src="https://freesvg.org/img/1574100842sroka7.png" width="100"/>
+
+# magpie 
+
 
 ## About
 
