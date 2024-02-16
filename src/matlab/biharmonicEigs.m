@@ -48,11 +48,11 @@ function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes)
 %           
 %           [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho, E, nu, ldim, h, BCs, Nmodes);
 
-%% Unpack array variables
-pack_ldim = num2cell(ldim);
-pack_BCs = num2cell(BCs);
-[Lx, Ly, Lz] = pack_ldim{:};
-[K0y, Kx0, KLy, KxL, R0y, Rx0, RLy, RxL] = pack_BCs{:};
+    %% Unpack array variables
+    pack_ldim = num2cell(ldim);
+    pack_BCs = num2cell(BCs);
+    [Lx, Ly, Lz] = pack_ldim{:};
+    [K0y, Kx0, KLy, KxL, R0y, Rx0, RLy, RxL] = pack_BCs{:};
 
 
     %%--- derived parameters (don't change here)
