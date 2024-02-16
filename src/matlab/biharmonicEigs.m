@@ -439,13 +439,13 @@ function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes)
     Om    = 2*pi*freqs ;
 
 
-
-    if Nmodes > 8
-        colormap('parula') ;
-        for m = 1 : 9
-            mdShape = reshape(Q(:,m),[(Ny+1),(Nx+1)]) ;
-            subplot(3,3,m)
-            mesh(real(mdShape),(abs(mdShape)),'FaceColor','texturemap') ; view(2); axis equal; axis tight;
-        end
+    subs = ceil(sqrt(Nmodes));
+    
+    colormap('parula') ;
+    for m = 1 : Nmodes
+        mdShape = reshape(Q(:,m),[(Ny+1),(Nx+1)]) ;
+        subplot(subs,subs,m)
+        mesh(real(mdShape),(abs(mdShape)),'FaceColor','texturemap') ; view(2); axis equal; axis tight;
     end
+    
 end
