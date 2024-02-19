@@ -12,8 +12,8 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
   %
   %         m       % number of total grid points X axis
   %         l       % number of total grid points Y axis
-  %         bctype  % boundary condition type: 1: simply supported, 2: clamped
   %         ord     % order of the matrix (string)
+  %         bctype  % boundary condition type: 1: simply supported, 2: clamped
   %
   %                 % Valid order inputs
   %                   ['x-','x+','x.','xx','xxxx',
@@ -22,49 +22,34 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
 
   %% Variable Arguement Length Check
   if nargin<2
-    error('Not enough input arguements')
+    error('Not enough input arguments')
 
-  elseif nargin==2
-
-    if ischar(arg2)
-      ord = arg2;
+  elseif nargin==2     
+      ord = convertCharsToStrings(arg2);   
       l = arg1;
       m = 1;
       bctype = 1;
-    else
-      bctype = arg2;
-      ord = 'xx';
-      l = arg1;
-      m = 1;
-    end
-
   elseif nargin==3
 
-    if ischar(arg2)
-      ord = arg2;
+    if ischar(arg2) || isstring(arg2)
+      ord = convertCharsToStrings(arg2);
       l = arg1;
       m = 1;
       bctype = arg3;
-    elseif ischar(arg3)
-      ord = arg3;
-      l = arg1;
-      m = arg2;
-      bctype = 1;
     else
-      bctype = arg3;
-      ord = 'xx';
+      ord = convertCharsToStrings(arg3);
       l = arg1;
       m = arg2;
+      bctype = 1;  
     end
-
   elseif nargin==4
     l = arg1;
     m = arg2;
-    ord = arg3;
+    ord = convertCharsToStrings(arg3);
     bctype = arg4;
 
   elseif nargin>1
-    error('Too many input arguements')
+    error('Too many input arguments')
   end
 
   %% Validate Arguments
@@ -74,7 +59,7 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
 
   validateattributes(l,      {'numeric'}, {'integer','positive'});
   validateattributes(m,      {'numeric'}, {'integer','positive'});
-  validatestring    (ord,    valid_orders);
+  ord = validatestring    (ord,    valid_orders);
   validateattributes(bctype, {'numeric'}, {'integer','positive', '<', 3});
 
   %% Set Identity Matrices
@@ -123,8 +108,10 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
       I([1 end],:) = 0;
       FDMat = I;
 
+    case {"grad","xy","xxyy","laplace","biharm"}
+        error('%s is not a valid order for a 1D scheme', ord);
     otherwise
-      error('something went wrong, check your arguements');
+      error('something went wrong, check your arguments');
 
     end
 
