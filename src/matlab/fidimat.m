@@ -1,18 +1,14 @@
 function FDMat = fidimat(arg1,arg2,arg3,arg4)
   % FIDIMAT Generate Finite Difference Spatial Sparcity Matrices
-  %   FDMat = FIDIMAT(l,ord) Generate stencil of ord for a 1D system length l
-  %           boundary condition defaults to simply supported
+  %   FDMat = FIDIMAT(l,ord) Generate stencil FDMat with order given by ord 
+  %           for a 1D system length l. Boundary condition defaults to simply supported
   %
-  %   FDMat = FIDIMAT(l,m,ord) Generate stencil of ord for a 2D system of size [l m]
-  %           boundary condition defaults to simply supported
+  %   FDMat = FIDIMAT(l,m,ord) Generate stencil FDMat with order given by ord 
+  %           for a 2D system of size [l m]. Boundary condition defaults to simply supported
   %
-  %   FDMat = FIDIMAT(l,m,ord,bctype) Generate stencil for a 2D system with
-  %        specified boundary conditions coefficients for 2D given the number 
-  %        of ALL grid points given by l and m.
+  %   FDMat = FIDIMAT(l,m,ord,bctype) Generate stencil FDMat with order given 
+  %           by ord for a 2D system of size [l m] with specified boundary conditions bctype.
   %
-  %   bctype denotes boundary condition
-  %
-  %         Returns a Sparse matrix BH
   %
   %         m       % number of total grid points X axis
   %         l       % number of total grid points Y axis
@@ -88,11 +84,11 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
   ss = l*m;
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %%%%% 1D Case
+  %% 1D Case
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  %% if only one dimension is stipulated the function will return only
-  %% a 1D FD matrix. In this case input is by the letter x
+  % if only one dimension is stipulated the function will return only
+  % a 1D FD matrix. In this case input is by the letter x
 
   if m == 1
 
@@ -133,7 +129,7 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
     end
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%% 2D Case
+    %% 2D Case
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   else
     % if two dimension arguements are given then the matri will out put the
@@ -192,8 +188,8 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
       XX = spdiags([ones(m,1),-2*ones(m,1),ones(m,1)],-1:1,speye(m));
       XX(1,2) = (bctype-1)*2; XX(m,m-1) = (bctype-1)*2;
       FDMat = kron(XX,Iy)^2;
-
-    case 'grad'
+    
+    case {'grad', 'xy'}
       Y = spdiags([-ones(l,1),zeros(l,1),ones(l,1)],[-1:1],speye(l));
       X = spdiags([-ones(m,1),zeros(m,1),ones(m,1)],[-1:1],speye(m));
       FDMat = kron(X,Iy) + kron(Ix,Y);
