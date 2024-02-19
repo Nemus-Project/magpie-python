@@ -1,4 +1,4 @@
-function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes)
+function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes,plot_type)
 % BIHARMONICEIGS What does this do?
 %   [Q,Om,Nx,Ny,biHarm] = BIHARMONICEIGS (rho,E,nu,Lx,Ly,Lz,h,K0y,R0y,Kx0,Rx0,KLy,RLy,KxL,RxL,Nmodes)
 %   A function that returns:
@@ -47,7 +47,16 @@ function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes)
 %           BCs = ones(4,2) * 1e15      %-- elastic constants around the edges
 %           
 %           [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho, E, nu, ldim, h, BCs, Nmodes);
-
+    %% Validation        
+    validateattributes(rho,      {'double'}, {'nonempty'});
+    validateattributes(E,        {'double'}, {'nonempty'});
+    validateattributes(nu,       {'double'}, {'nonempty'});
+    validateattributes(ldim,     {'double'}, {'numel', 3});
+    validateattributes(h,        {'double'}, {'nonempty'});    
+    validateattributes(BCs,      {'double'}, {'size', [4,2]});
+    validateattributes(Nmodes,   {'numeric'}, {'integer','positive'});
+    validatestring(plot_type,["chladni","3D","none"]);
+              
     %% Unpack array variables
     pack_ldim = num2cell(ldim);
     pack_BCs = num2cell(BCs);
@@ -439,13 +448,36 @@ function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes)
     Om    = 2*pi*freqs ;
 
 
-    subs = ceil(sqrt(Nmodes));
-    
-    colormap('parula') ;
-    for m = 1 : Nmodes
-        mdShape = reshape(Q(:,m),[(Ny+1),(Nx+1)]) ;
-        subplot(subs,subs,m)
-        mesh(real(mdShape),(abs(mdShape)),'FaceColor','texturemap') ; view(2); axis equal; axis tight;
+    switch plot_type
+        case 'chladni'
+            subs = ceil(sqrt(Nmodes));
+            
+            colormap('copper') ;
+            cmp = colormap;
+            cmp = flipud(cmp);
+            colormap(cmp);    
+                
+            for m = 1 : Nmodes
+                mdShape = reshape(Q(:,m),[(Ny+1),(Nx+1)]) ;
+                subplot(subs,subs,m)
+                mesh(3e3*real(mdShape),(abs(mdShape)),'FaceColor','texturemap') ; 
+                view(2); 
+                axis equal; 
+                axis tight;        
+                axis off;
+                clim([0.00005 0.002]);        
+            end
+
+        case '3D'
+        
+            subs = ceil(sqrt(Nmodes));
+            colormap('parula') ;
+
+            for m = 1 : Nmodes
+                mdShape = reshape(Q(:,m),[(Ny+1),(Nx+1)]) ;
+                subplot(subs,subs,m)
+                mesh(3000*(mdShape),(abs(mdShape)),'FaceColor','texturemap') ;
+            end 
     end
     
 end
