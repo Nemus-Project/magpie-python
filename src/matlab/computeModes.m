@@ -23,7 +23,7 @@ mode_freqs = zeros(Nmodes,5);
 col = 1;
 
 for E = linspace(E0*0.8, E0*1.2, 1)    
-    [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho, E, nu, ldim, h, BCs, Nmodes, 'none');
+    [Q,Om,Nx,Ny,biHarm] = magpie(rho, E, nu, ldim, h, BCs, Nmodes, 'chladni');
     fprintf('--- Modal Freqs (Hz) ---\n');
     fprintf('%.1f\n', Om/2/pi);
     mode_freqs(:, col) = Om/2/pi;
