@@ -1,9 +1,21 @@
-function biHarm = bhmat(BCs,Nxy,h,D,nu)
+function biHarm = bhmat(BCs,Nxy,h,Lz,E,nu)
+% biHarm = BHMAT(BCs,Nxy,h,D,nu) compute a biharmonic for a Thin Plate
+% of size [Nx Ny]
+%
+%   Arguments:
+%       BCS          %-- density [kg/m^3]
+%       Nxy          %-- Number of grad points [Nx Ny]
+%       h            %-- Grid spacing
+%       Lz           %-- plate thickness
+%       E            %-- Young's mod [Pa]
+%       nu           %-- poisson's ratio
+%       
     %% validate    
     validateattributes(BCs,      {'double'}, {'size', [4,2]});
     validateattributes(Nxy,      {'double'}, {'numel', 2, 'positive','integer'});
     validateattributes(h,        {'double'}, {'nonempty'});    
-    validateattributes(D,        {'double'}, {'nonempty'});
+    validateattributes(Lz,       {'double'}, {'nonempty'});
+    validateattributes(E,        {'double'}, {'nonempty'});
     validateattributes(nu,       {'double'}, {'nonempty'});
     
     %% Unpack Variables
@@ -12,6 +24,7 @@ function biHarm = bhmat(BCs,Nxy,h,D,nu)
     Nx = Nxy(1);
     Ny = Nxy(2);
 
+    D = E * Lz^3 / 12 / (1-nu^2);
     %% MATRIX BUILDER
     
     %%--- build matrix in blocks

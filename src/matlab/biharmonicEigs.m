@@ -63,13 +63,13 @@ function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes,plot_ty
     [Lx, Ly, Lz] = pack_ldim{:};
     [K0y, Kx0, KLy, KxL, R0y, Rx0, RLy, RxL] = pack_BCs{:};
 
-    %%--- derived parameters (don't change here)
-    D       = E * Lz^3 / 12 / (1-nu^2) ;
+    %%--- derived parameters (don't change here)    
+    D = E * Lz^3 / 12 / (1-nu^2);
     Nx      = floor(Lx/h) ;
     Ny      = floor(Ly/h) ;
     %%----------------------------
     %% Build BiHarmonic
-    biHarm = bhmat(BCs,[Nx Ny], h, D, nu);
+    biHarm = bhmat(BCs,[Nx Ny], h, Lz, E, nu);
     
     %% EIGENVALUES
 
