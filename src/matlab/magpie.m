@@ -1,6 +1,6 @@
-function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes,plot_type)
-% BIHARMONICEIGS What does this do?
-%   [Q,Om,Nx,Ny,biHarm] = BIHARMONICEIGS (rho,E,nu,Lx,Ly,Lz,h,K0y,R0y,Kx0,Rx0,KLy,RLy,KxL,RxL,Nmodes)
+function [Q,Om,Nx,Ny,biHarm] = magpie(rho,E,nu,ldim,h,BCs,Nmodes,plot_type)
+% MAGPIE What does this do?
+%   [Q,Om,Nx,Ny,biHarm] = MAGPIE (rho,E,nu,Lx,Ly,Lz,h,K0y,R0y,Kx0,Rx0,KLy,RLy,KxL,RxL,Nmodes)
 %   A function that returns:
 %           Q       : Eigen vector(s)
 %           Om      : Angular modal frequencies
@@ -46,7 +46,7 @@ function [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho,E,nu,ldim,h,BCs,Nmodes,plot_ty
 %           h       = sqrt(Lx*Ly)*0.01; %--           
 %           BCs = ones(4,2) * 1e15      %-- elastic constants around the edges
 %           
-%           [Q,Om,Nx,Ny,biHarm] = biharmonicEigs(rho, E, nu, ldim, h, BCs, Nmodes);
+%           [Q,Om,Nx,Ny,biHarm] = magpie(rho, E, nu, ldim, h, BCs, Nmodes);
     %% Validation        
     validateattributes(rho,      {'double'}, {'nonempty'});
     validateattributes(E,        {'double'}, {'nonempty'});
