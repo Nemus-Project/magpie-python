@@ -15,7 +15,9 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     """
     ## validate
     assert BCs.shape == (4, 2)
-    assert len(Nxy) == 2 and all([type(val) is int for val in Nxy]) and all([val > 0 for val in Nxy])
+    assert len(Nxy) == 2
+    assert all([type(val) is int for val in Nxy])
+    assert all([val > 0 for val in Nxy])
     assert h != 0.0
     assert Lz != 0.0
     assert E != 0.0
@@ -286,7 +288,7 @@ def main():
     E = 9.0e+9  # -- Young's mod [Pa]
     rho = 8765  # -- density [kg/m^3]
     nu = 0.3  # -- poisson's ratio
-    Nmodes = 25  # -- number of modes to compute
+    Nmodes = 4  # -- number of modes to compute
     h = np.sqrt(Lx * Ly) * 0.01  # -- grid spacing
     BCs = np.ones((4, 2)) * 1e15  # -- elastic constants around the edges
 
