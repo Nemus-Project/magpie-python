@@ -1,9 +1,6 @@
-import numpy as np
 from Dxx_coeffs import *
-import numbers
 import numpy as np
 from scipy.sparse import *
-
 
 def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float):
     """
@@ -32,9 +29,9 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     ## MATRIX BUILDER
 
     ##--- build matrix in blocks
-    a0 = np.ones((Ny + 1))
-    a1 = np.ones((Ny))
-    a2 = np.ones((Ny - 1))
+    a0 = np.ones((Ny - 0))
+    a1 = np.ones((Ny - 1))
+    a2 = np.ones((Ny - 2))
 
     D00u00, D00u10, D00u20, D00u01, D00u02, D00u11 = D00_coeffs(K0y, R0y, Kx0, Rx0, h, D, nu)
     D01u01, D01u11, D01u21, D01u00, D01u02, D01u03, D01u12, D01u10 = D01_coeffs(K0y, R0y, Rx0, h, D, nu)
@@ -268,40 +265,18 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     D0[[0, 1, -1, -2]] = [D10u30, D11u31, D1Nu3N, D1Nm1u3Nm1]
     BlkMm1Mm3 = diags(D0)
 
-    # biHarm = sparse((Nx+1)*(Ny+1),(Nx+1)*(Ny+1))
-    #
-    #
-    # for m in np.r_[1 : Nx - 1]:
-    #     biHarm[(Ny+1)*(m-1)+1 : (Ny+1)*m, (Ny+1)*(m-1)+1 : (Ny+1)*])        = Blk33
-    #     biHarm[(Ny+1)*(m-1)+1 : (Ny+1)*m, (Ny+1)*(m-2)+1 : (Ny+1)*(m-1)]    = Blk32
-    #     biHarm[(Ny+1)*(m-1)+1 : (Ny+1)*m, (Ny+1)*(m-3)+1 : (Ny+1)*(m-2)]    = Blk31
-    #     biHarm[(Ny+1)*(m-1)+1 : (Ny+1)*m, (Ny+1)*m+1 : (Ny+1)*(m+1)]        = Blk34
-    #     biHarm[(Ny+1)*(m-1)+1 : (Ny+1)*m, (Ny+1)*(m+1)+1 : (Ny+1)*(m+2)]    = Blk35
-    #
-    #
-    # biHarm[0:Ny+1,0:Ny+1]           = Blk11
-    # biHarm[0:Ny+1,Ny+2:2*Ny+2]      = Blk12
-    # biHarm[0:Ny+1,2*Ny+3:3*Ny+3]    = Blk13
-    #
-    #
-    # biHarm[Nx*(Ny+1)+1:(Ny+1)*(Nx+1),Nx*(Ny+1)+1:(Ny+1)*[Nx+1)] ]        = BlkMM
-    # biHarm[Nx*(Ny+1)+1:(Ny+1)*(Nx+1),(Nx-1)*(Ny+1)+1:[Ny+1)*Nx]]         = BlkMMm1
-    # biHarm[Nx*(Ny+1)+1:(Ny+1)*(Nx+1),(Nx-2)*(Ny+1)+1:(Ny+1)*[Nx-1)] ]    = BlkMMm2
-    #
-    #
-    # biHarm[Ny+2:2*Ny+2,1:Ny+1]          = Blk21
-    # biHarm[Ny+2:2*Ny+2,Ny+2:2*Ny+2]     = Blk22
-    # biHarm[Ny+2:2*Ny+2,2*Ny+3:3*Ny+3]   = Blk23
-    # biHarm[Ny+2:2*Ny+2,3*Ny+4:4*Ny+4]   = Blk24
-    #
-    # biHarm[(Ny+1)*(Nx-1)+1:Nx*(Ny+1),Nx*(Ny+1)+1:(Ny+1)*[Nx+1)]]         = BlkMm1M
-    # biHarm[(Ny+1)*(Nx-1)+1:Nx*(Ny+1),(Nx-1)*(Ny+1)+1:(Ny+1)*[Nx)]]       = BlkMm1Mm1
-    # biHarm[(Ny+1)*(Nx-1)+1:Nx*(Ny+1),(Nx-2)*(Ny+1)+1:(Ny+1)*[Nx-1)]]     = BlkMm1Mm2
-    # biHarm[(Ny+1)*(Nx-1)+1:Nx*(Ny+1),(Nx-3)*(Ny+1)+1:(Ny+1)*[Nx-2)]]     = BlkMm1Mm3
-    #
-    # biHarm = biHarm / (h ** 4)
-    # return biHarm
+    # Assemble Biharmonic
+    MM = Nx*Ny
 
+    biharm = bmat([[Blk11, Blk12, Blk13, *[None] * (Nx - 3)],
+                   [Blk21, Blk22, Blk23, Blk24, *[None] * (Nx - 4)],
+                   *[[*[None] * r, *[Blk31, Blk32, Blk33, Blk34, Blk35], *[None] * (Nx - (5 + r))] for r in
+                     range(Nx-4)],
+                   [*[None] * (Nx - 4), BlkMm1Mm3, BlkMm1Mm2, BlkMm1Mm1, BlkMm1M],
+                   [*[None] * (Nx - 3), BlkMMm2, BlkMMm1, BlkMM]
+                   ])
+
+    return biharm / (h ** 4)
 
 def main():
     Lx = 1.10
