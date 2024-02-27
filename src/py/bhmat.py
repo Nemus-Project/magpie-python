@@ -50,10 +50,10 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     Dm2 = D02u00 * a2
 
     D0[[0, 1, -2, -1]] = [D00u00, D01u01, D0Nm1u0Nm1, D0Nu0N]
-    D1[[0, 1, -1, -2]] = [D00u01, D01u02, D0Nu0Nm1, D0Nm1u0Nm2]
+    D1[[0, 1, -2, -1]] = [D00u01, D01u02, D0Nm1u0Nm2, D0Nu0Nm1]
     D2[[0, 1]] = [D00u02, D01u03]
     Dm1[[0, -1]] = [D01u00, D0Nm1u0N]
-    Dm1[[-1, -2]] = [D0Nu0Nm2, D0Nm1u0Nm3]
+    Dm2[[-1, -2]] = [D0Nu0Nm2, D0Nm1u0Nm3]
     Blk11 = diags(D0, 0) + diags(D1, 1) + diags(Dm1, -1) + diags(D2, 2) + diags(Dm2, -2)
 
     ###-- Blk12
@@ -182,7 +182,6 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     [D0Nm1u0Nm1, D0Nm1u1Nm1, D0Nm1u2Nm1, D0Nm1u0N, D0Nm1u0Nm2, D0Nm1u0Nm3, D0Nm1u1Nm2, D0Nm1u1N] = D01_coeffs(KLy, RLy,
                                                                                                               RxL, h, D,
                                                                                                               nu)
-
     # -- BlkMM
     D0 = D02u02 * a0
     D1 = D02u03 * a1
