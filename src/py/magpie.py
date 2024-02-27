@@ -1,6 +1,7 @@
 import numpy as np
 from bhmat import bhmat
 from scipy.sparse.linalg import eigs
+from scipy.sparse import eye
 import matplotlib
 from matplotlib import pyplot as plt
 matplotlib.use('macosx')
@@ -29,59 +30,38 @@ def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarra
 
     ## EIGENVALUES
 
-    [Dm, Q] = eigs(biharm, Nmodes, which='SM')
+    [Dm, Q] = eigs(biharm, Nmodes, sigma=10.0, which='LR')
+    # [Dm, Q] = eigs(biharm, Nmodes, which='SM')
 
     Om = np.sqrt(abs(Dm)) * np.sqrt(D / rho / Lz) / 2 / np.pi
     hz = Om / (2 * np.pi)
     indSort = np.argsort(Dm)
     Q = Q[:, indSort]
 
-
-
-    m = 1;
     X = np.arange(0, Ny)
     Y = np.arange(0, Nx)
     X, Y = np.meshgrid(X, Y)
 
     sq = int(np.ceil(np.sqrt(Nmodes)))
-    fig , axes = plt.subplots(sq, sq, sharey=True, subplot_kw={"projection": "3d"})
 
-    for m in range(Nmodes):
-        Z = np.reshape(Q[:, m], [Nx, Ny])
-        axes[m//sq][m%sq].plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='hot', linewidth=0, antialiased=False)
+    if plot_type == 'chladni':
+        for m in range(Nmodes):
+            plt.subplot(sq, sq, m + 1)
+            Z = np.real(np.reshape(Q[:, m], [Nx, Ny]))
+            plt.pcolormesh(X, Y, Z, cmap='copper', shading='gouraud')
+        plt.show()
 
-    plt.show()
-    # if plot_type == 'chladni':
-    #     subs = ceil(sqrt(Nmodes));
-    #
-    #     colormap('copper');
-    #     cmp = colormap;
-    #     cmp = flipud(cmp);
-    #     colormap(cmp);
-    #
-    #     for m in np.r_[1: Nmodes]:
-    #         mdShape = reshape(Q(:, m), [(Ny + 1), (Nx + 1)]);
-    #         subplot(subs, subs, m)
-    #         mesh(3e3 * real(mdShape), (abs(mdShape)), 'FaceColor', 'texturemap');
-    #         view(2);
-    #         axis
-    #         equal;
-    #         axis
-    #         tight;
-    #         axis
-    #         off;
-    #         clim([0.00005 0.002]);
-    #
-    #
-    # elif plot_type == '3D':
-    #
-    #     subs = ceil(sqrt(Nmodes));
-    #     colormap('parula');
-    #
-    #     for m in np.r_[1: Nmodes]:
-    #         mdShape = reshape(Q(:, m), [(Ny + 1), (Nx + 1)]);
-    #         subplot(subs, subs, m)
-    #         mesh(3000 * (mdShape), (abs(mdShape)), 'FaceColor', 'texturemap');
+    elif plot_type == '3D':
+
+        fig, axes = plt.subplots(sq, sq, subplot_kw={"projection": "3d"})
+
+        for m in range(Nmodes):
+            Z = np.reshape(Q[:, m], [Nx, Ny])
+            axes[m // sq][m % sq].plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='hot', linewidth=0,
+                                               antialiased=False)
+        plt.show()
+
+    return [Q, Om, {'x': Nx,'y': Ny}, biharm]
 
 def main():
     Lx = 1.10
@@ -92,11 +72,22 @@ def main():
     rho = 8765  # -- density [kg/m^3]
     nu = 0.3  # -- poisson's ratio
     Nmodes = 16  # -- number of modes to compute
-    h = np.sqrt(Lx * Ly) * 0.05  # -- grid spacing
+    h = np.sqrt(Lx * Ly) * 0.02  # -- grid spacing
     BCs = np.zeros((4, 2)) * 1e15  # -- elastic constants around the edges
     BCs[0,:] = 1e15
 
-    magpie(rho, E, nu, ldim, h, BCs, Nmodes, 'chladni')
+    return magpie(rho, E, nu, ldim, h, BCs, Nmodes, None)
 
 if __name__ == '__main__':
-    main()
+    Q, Om, N, biharm = main()
+    Nmodes = Q.shape[1]
+    sq = int(np.ceil(np.sqrt(Nmodes)))
+
+    X = np.arange(0, N['y'])
+    Y = np.arange(0, N['x'])
+    X, Y = np.meshgrid(X, Y)
+    for m in range(Nmodes):
+        plt.subplot(sq, sq, m+1)
+        Z = np.real(np.reshape(Q[:, m], [N['x'], N['y']]))
+        plt.pcolormesh(X,Y, Z, cmap='copper', shading='gouraud')
+    plt.show()
