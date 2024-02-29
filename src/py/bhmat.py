@@ -24,7 +24,7 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     assert nu != 0.0
 
     ## Unpack Variables
-    K0y, Kx0, KLy, KxL, R0y, Rx0, RLy, RxL = BCs.flatten()
+    K0y, R0y, Kx0, Rx0, KLy, RLy,KxL, RxL = BCs.flatten()
     Nx, Ny = Nxy
 
     D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
