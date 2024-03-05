@@ -4,9 +4,9 @@ from scipy.sparse.linalg import eigs
 from scipy.sparse import eye
 import matplotlib
 from matplotlib import pyplot as plt
-matplotlib.use('macosx')
 
-def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nmodes: int, plot_type: str):
+
+def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nmodes: int, plot_type: str=None, base_mode: float=0.0):
     """
 
     :param rho:
@@ -29,11 +29,9 @@ def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarra
     biharm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
 
     ## EIGENVALUES
+    [Dm, Q] = eigs(biharm, Nmodes, sigma=base_mode, which='LR')
 
-    [Dm, Q] = eigs(biharm, Nmodes, sigma=10.0, which='LR')
-    # [Dm, Q] = eigs(biharm, Nmodes, which='SM')
-
-    Om = np.sqrt(abs(Dm)) * np.sqrt(D / rho / Lz) / 2 / np.pi
+    Om = np.sqrt(abs(Dm)) * np.sqrt(D / rho / Lz) 
     hz = Om / (2 * np.pi)
     indSort = np.argsort(Dm)
     Q = Q[:, indSort]
@@ -46,9 +44,12 @@ def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarra
 
     if plot_type == 'chladni':
         for m in range(Nmodes):
-            plt.subplot(sq, sq, m + 1)
-            Z = np.real(np.reshape(Q[:, m], [Nx, Ny]))
-            plt.pcolormesh(X, Y, Z, cmap='copper', shading='gouraud')
+            ax = plt.subplot(sq, sq, m + 1)
+            Z = abs(np.reshape(Q[:, m], [Nx, Ny]))
+            chladni = plt.pcolormesh( Z.T, cmap='copper_r', shading='gouraud')
+            ax.set_axis_off()
+            chladni.set_clim(0.000, 0.002)
+            
         plt.show()
 
     elif plot_type == '3D':
@@ -71,23 +72,25 @@ def main():
     E = 9.0e+9  # -- Young's mod [Pa]
     rho = 8765  # -- density [kg/m^3]
     nu = 0.3  # -- poisson's ratio
-    Nmodes = 16  # -- number of modes to compute
-    h = np.sqrt(Lx * Ly) * 0.02  # -- grid spacing
+    Nmodes = 4  # -- number of modes to compute
+    h = np.sqrt(Lx * Ly) * 0.01  # -- grid spacing
     BCs = np.zeros((4, 2)) * 1e15  # -- elastic constants around the edges
     BCs[0,:] = 1e15
 
-    return magpie(rho, E, nu, ldim, h, BCs, Nmodes, None)
+    matplotlib.use('macosx')
+    return magpie(rho, E, nu, ldim, h, BCs, Nmodes, 'chladni')
 
 if __name__ == '__main__':
-    Q, Om, N, biharm = main()
-    Nmodes = Q.shape[1]
-    sq = int(np.ceil(np.sqrt(Nmodes)))
 
-    X = np.arange(0, N['y'])
-    Y = np.arange(0, N['x'])
-    X, Y = np.meshgrid(X, Y)
-    for m in range(Nmodes):
-        plt.subplot(sq, sq, m+1)
-        Z = np.real(np.reshape(Q[:, m], [N['x'], N['y']]))
-        plt.pcolormesh(X,Y, Z, cmap='copper', shading='gouraud')
-    plt.show()
+    Q, Om, N, biharm = main()
+    # Nmodes = Q.shape[1]
+    # sq = int(np.ceil(np.sqrt(Nmodes)))
+    #
+    # X = np.arange(0, N['y'])
+    # Y = np.arange(0, N['x'])
+    # X, Y = np.meshgrid(X, Y)
+    # for m in range(Nmodes):
+    #     plt.subplot(sq, sq, m+1)
+    #     Z = np.real(np.reshape(Q[:, m], [N['x'], N['y']]))
+    #     plt.pcolormesh(X,Y, Z, cmap='copper', shading='gouraud')
+    # plt.show()
