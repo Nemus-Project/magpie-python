@@ -1,0 +1,35 @@
+﻿material,youngs,densities
+Acrylic,3.2,1.19
+Chlorinated polyether,1.1,1.4
+Acetals,2.8,1.42
+Silicon,130,2.33
+Aluminum,69,2.7
+Sapphire,435,3.98
+Selenium,58,4.4
+Vanadium,131,6.1
+Chromium,248,7.1
+Zinc,83,7.12
+Cast Iron,130,7.2
+Tin,47,7.28
+Manganese,159,7.43
+Aluminum Bronze,120,7.7
+Steel,200,7.82
+Cadmium,32,8.64
+Copper,117,8.79
+Cobalt,207,8.8
+Nickel,170,8.9
+Bismuth,32,9.8
+Silver,72,10.5
+Lead,13.8,11.35
+Thorium,59,11.7
+Rhodium,290,12.3
+Tantalum,186,16.6
+Uranium,170,19.1
+Gold,74,19.29
+Platinum,147,21.5
+Iridium,517,22.5
+Glass,50,2.7
+Granite,52,2.7
+Iron,210,7.2
+Brass,102,8.5
+Bronze,96,8.8
