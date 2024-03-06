@@ -3,62 +3,29 @@
 
 ## About
 
-Finite Difference implementation of a stiff plate with adjustable boundary conditions.
+Magpie is an open source framework for working with thin plates with generalized elastic boundary conditions. The framework is designed around two key use cases
 
-Elastic boundary conditions adjustable both in torsional $R$ stiffness and transversal stiffness $K$
+1. Exploration of plates for understanding how material properties affect mode shapes and modal frequencies.
+2. Derivation of material properties from experimental data.
 
-## Functionality
+## Structure
 
-- Inputs
-  - Material
-    - from a data set of coefficients from literature  
-      - named
-      - or set range manually
-  - Continuous scale for elastic boundary conditions
-- Outputs
-  - Image (or series)
-    - downloadable in common formats (jpg, png)
-      - modal patterns
-      - in 2D
-        - with a colour map
-        - or with simple node lines
-      - in 3D 
-        - ThreeJS interface
-        - adjustable camera
-    - Cached Results
-      - slide across scale of elastic conditions and Young's
-  - data as text / common data exchange formats (csv / tsv / JSON)
-    - input paremeters
-      - across a scale Young's moduli
-    - derived coefficients
-      - Modal frequencies
-  - Audio
-    - Impulse response from a FDTD simulation of the plate
-    - Pure tones of eigen frequencies
-  - Plots
-    - plot frequency of IR against Eigen Frequencies
-    - sonify tones of eigen frequencies
+All source code is found in the `src/` directory of the repository. In `src/` you can find a directory for each supported language as well as a `data/` directory which contains any datasets shared across implementations.
 
-## Goals
+### Magpie function
 
-- create an interface for user to explore parameters
-  - Parameters
-    - For each edge
-      - 2 springs
-        - rotational
-        - transversal
-    - Grid size
-    - Material
-    - Geometric Parameters
-    - Young's Modulus
-    - density
-- through the browser
+The magpie function accepts:
 
-## Dependencies
+- plate material properties: density, elasticity (Young's modulus), poisson ratio
+- plate constraints: dimensions, boundary conditions
 
-### MATLAB
+The user can stipulate an accuracy coefficient and how many modes they wish to calculate.
 
-- fastsmooth [(Fast smoothing function Version 2.0.0.0 (52.4 KB) by Tom O'Haver)](https://it.mathworks.com/matlabcentral/fileexchange/19998-fast-smoothing-function)
-- Symbolic Math Toolbox
+The output from `magpie` is:
+
+- `Q`: A list of eigen vectors, one for each mode. This can be used to visualize the mode shape.
+- `Om`: The angular frequency for the corresponding eigen vector.
+- `N`:  Number of grid points in the $x$ and $y$ dimensions for the plate. A smaller `h` value will result in a larger number of grid points
+- `biharm`: The biharmonic used for deriving eigen vectors and modal frequencies. The biharmonic can also be used for a finite difference difference time domain scheme of the plate.
 
 ## References
