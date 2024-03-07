@@ -29,3 +29,6 @@ The output from `magpie` is:
 - `biharm`: The biharmonic used for deriving eigen vectors and modal frequencies. The biharmonic can also be used for a finite difference difference time domain scheme of the plate.
 
 ## References
+
+- Howard, & Angus, J. A. S. (2009). _Acoustics and psychoacoustics_ (4th ed..).
+- Ashby, (October 2021) [_Material property data for engineering materials_](https://www.ansys.com/content/dam/amp/2021/august/webpage-requests/education-resources-dam-upload-batch-2/material-property-data-for-eng-materials-BOKENGEN21.pdf) Department of Engineering, University of Cambridge (5th edition)
