@@ -1,9 +1,9 @@
-function [Q,Om,Nx,Ny,biHarm] = magpie(rho,E,nu,ldim,h,BCs,Nmodes,plot_type)
+function [Om,Q,Nx,Ny,biHarm] = magpie(rho,E,nu,ldim,h,BCs,Nmodes,plot_type)
 % MAGPIE What does this do?
-%   [Q,Om,Nx,Ny,biHarm] = MAGPIE (rho,E,nu,Lx,Ly,Lz,h,K0y,R0y,Kx0,Rx0,KLy,RLy,KxL,RxL,Nmodes)
+%   [Om,Q,Nx,Ny,biHarm] = MAGPIE (rho,E,nu,Lx,Ly,Lz,h,K0y,R0y,Kx0,Rx0,KLy,RLy,KxL,RxL,Nmodes)
 %   A function that returns:
-%           Q       : Eigen vector(s)
 %           Om      : Angular modal frequencies
+%           Q       : A matrix of column eigenvector(s)
 %           Nx      : Grid points along the x-axis
 %           Ny      : Grid points along the y-axis
 %           biHarm  : Biharmonic Matrix for the plate
@@ -46,7 +46,7 @@ function [Q,Om,Nx,Ny,biHarm] = magpie(rho,E,nu,ldim,h,BCs,Nmodes,plot_type)
 %           h       = sqrt(Lx*Ly)*0.01; %--           
 %           BCs = ones(4,2) * 1e15      %-- elastic constants around the edges
 %           
-%           [Q,Om,Nx,Ny,biHarm] = magpie(rho, E, nu, ldim, h, BCs, Nmodes);
+%           [Om,Q,Nx,Ny,biHarm] = magpie(rho, E, nu, ldim, h, BCs, Nmodes,'none');
     %% Validation        
     validateattributes(rho,      {'double'}, {'nonempty'});
     validateattributes(E,        {'double'}, {'nonempty'});
@@ -106,11 +106,14 @@ function [Q,Om,Nx,Ny,biHarm] = magpie(rho,E,nu,ldim,h,BCs,Nmodes,plot_type)
         
             subs = ceil(sqrt(Nmodes));
             colormap('parula') ;
+            xax = (0:Nx)*h ;
+            yax = (0:Ny)*h ;
+            [X,Y] = meshgrid(xax,yax) ;
 
             for m = 1 : Nmodes
                 mdShape = reshape(Q(:,m),[(Ny+1),(Nx+1)]) ;
                 subplot(subs,subs,m)
-                mesh(3000*(mdShape),(abs(mdShape)),'FaceColor','texturemap') ;
+                mesh(X,Y,3000*(mdShape),(abs(mdShape)),'FaceColor','texturemap') ;
             end 
     end
     
