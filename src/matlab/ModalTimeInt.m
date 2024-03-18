@@ -162,7 +162,7 @@ for n = 1 : Ts
     velR(n) = (outRcur-outRprev)/k ;
     vm      = v0 ;
     v0      = vp ;
-    outLcur = outLprev ; outRcur = outRprev ;
+    outLprev = outLcur ; outRprev = outRcur ;
 
 end
 
