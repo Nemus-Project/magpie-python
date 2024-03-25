@@ -1,12 +1,10 @@
 function E  = youngcalc(rho,ldim,h,BCs,ExpFreq,Ntrain)
-
-%--------------------------------------------------------------------------
 % YOUNGCALC: what does this do ?
 %      E  = YOUNGCALC(rho,ldim,h,BCs,ExpFreq,Ntrain)
-
+%
 % this is a function that returns Young's modulus (E) of an experimental plate
 % starting from a batch of experimentally measured frequencies, leveraging MAGPIE
-
+%
 % Input parameters
 %           rho     : the experimental plate density
 %           ldim    : a 3X1 array containing the Lx Ly Lz dimensions
@@ -14,9 +12,9 @@ function E  = youngcalc(rho,ldim,h,BCs,ExpFreq,Ntrain)
 %           BCs     : a 4X2 array containing the rigidities of the boundary supports of the experimental plate
 %           ExpFreq : an array contaning the first Nmodes measured modal frequencies
 %           Ntrain  : an integer. Must be <= Nmodes. It is the number of training modes out of the available batch
-
+%
 % example usage
-
+%
 %           ExpFreq = [73.2; 148; 376; 431; 559; 910] ;  %-- these are measured from a plate 
 %           rho     = 8765 ;            %-- density [kg/m^3]
 %           Lx      = 0.1 ;
@@ -24,17 +22,18 @@ function E  = youngcalc(rho,ldim,h,BCs,ExpFreq,Ntrain)
 %           Lz      = 0.00081 ;
 %
 % cantilever BCs. Clamped edge along x:
-%           BCs = [0, 0;
-%                   1e15, 1e15;
-%                       0, 0;
-%                       0, 0];
+%           BCs = [0,    0;
+%                  1e15, 1e15;
+%                  0,    0;
+%                  0,    0];
 %
 %           ldim    = [Lx Ly Lz] ;
 %           h       = sqrt(Lx*Ly)*0.01 ;  %-- grid spacing [m]
 %
 %           E  = youngcalc(rho,ldim,h,BCs,ExpFreq,3) ;
+%
 %--------------------------------------------------------------------------
-
+%
 
 Nmodes = length(ExpFreq) ;
 
