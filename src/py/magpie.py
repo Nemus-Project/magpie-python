@@ -62,7 +62,7 @@ def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarra
                                                antialiased=False)
         plt.show()
 
-    return [Q, Om, {'x': Nx,'y': Ny}, biharm]
+    return [Om, Q, {'x': Nx,'y': Ny}, biharm]
 
 def main():
     Lx = 1.10
