@@ -44,7 +44,7 @@ def youngcalc(rho: float, ldim: list, h: float, BCs: np.ndarray, ExpFreq: list, 
     TestFreq = [] if Ntrain == Nmodes else ExpFreq[Ntrain + 1:]
 
     # -- zero parameters
-    E0 = 2e11  # -- Young's modulus [Pa] (just a number here, results shouldnt change if this changes)
+    E0 = 2e11  # -- Young's modulus [Pa] (just a number here, results should not change if this changes)
     nu = 0.3  # -- poisson's ratio (average value for metals)
     Lx, Ly, Lz = ldim
 
@@ -58,65 +58,13 @@ def youngcalc(rho: float, ldim: list, h: float, BCs: np.ndarray, ExpFreq: list, 
 
     # -- least-square (LS) optimisation
     psi = np.reshape(((TrainFreq * 2 * np.pi) ** 2) * rho * Lz * (A ** 2),(-1,1))
-    DLS = ((OmNDimsq @ psi) / (OmNDimsq @ OmNDimsq.T))[0][0]
+    DLS = ((OmNDimsq @ psi) / (OmNDimsq @ OmNDimsq.T))[0,0]
     ELS = DLS / ((Lz ** 3) / 12 / (1 - (nu ** 2)))
-    # OmSqLS    = OmNDimsq*DLS 
 
     # -- launch a numerical simulation to get the frequencies of the numerical model
     # -- using the estimated Youngs Mod
     # -- and compare against the experimental freqs
     NumOm, _, _, _ = magpie(rho, ELS, nu, ldim, h, BCs, Nmodes, "none")
-    NumFreq = [ang_freq / 2 / np.pi for ang_freq in NumOm]
-
-    if should_plot:
-        if Ntrain < Nmodes:
-            pass
-            # subplot(2,2,1)
-            # Y = [TrainFreq,NumFreq(1:Ntrain)] 
-            # X = 1:Ntrain 
-            # bar(X,Y)
-            # xlabel('Mode Number') 
-            # ylabel('f (Hz)')
-            # legend('Exp','Num')
-            # title('Training Set')
-            #
-            # subplot(2,2,3)
-            # errTrain = (1-Y(:,2)./Y(:,1))*100 
-            # bar(X,errTrain)
-            # xlabel('Mode Number') 
-            # ylabel('rel err (#)')
-            #
-            # subplot(2,2,2)
-            # Y = [TestFreq,NumFreq(Ntrain+1:end)] 
-            # X = Ntrain+1:Nmodes 
-            # bar(X,Y)
-            # xlabel('Mode Number') 
-            # ylabel('f (Hz)')
-            # legend('Exp','Num')
-            # title('Testing Set')
-            #
-            # subplot(2,2,4)
-            # errTest = (1-Y(:,2)./Y(:,1))*100 
-            # bar(X,errTest)
-            # xlabel('Mode Number') 
-            # ylabel('rel err (#)')
-
-        else:
-            pass
-            # subplot(2,1,1)
-            # Y = [TrainFreq,NumFreq(1:Ntrain)] 
-            # X = 1:Ntrain 
-            # bar(X,Y)
-            # xlabel('Mode Number') 
-            # ylabel('f (Hz)')
-            # legend('Exp','Num')
-            # title('Training Set')
-            #
-            # subplot(2,1,2)
-            # errTrain = (1-Y(:,2)./Y(:,1))*100 
-            # bar(X,errTrain)
-            # xlabel('Mode Number') 
-            # ylabel('rel err (#)')
 
     return ELS
 
