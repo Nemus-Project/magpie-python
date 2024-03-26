@@ -14,7 +14,7 @@ function [Om,Q,Nx,Ny,biHarm,Dm] = magpie(rho,E,nu,ldim,h,BCs,Nm,plot_type)
 %       E            %-- Young's mod [Pa]
 %       nu           %-- poisson's ratio
 %
-%       3 element array  representing  x,yz dimensions of plate
+%       3 element array  representing  [x,y,z] dimensions of plate
 %       ldim = [Lx,  %-- length along x [m]
 %               Ly,  %-- length along y [m]
 %               Lz]  %-- thickness [m]
