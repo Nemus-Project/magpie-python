@@ -6,24 +6,34 @@ import matplotlib
 from matplotlib import pyplot as plt
 
 
-def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nmodes: int, plot_type: str=None, base_mode: float=0.0):
+def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nm: int=0, plot_type: str=None, base_mode: float=0.0):
     """
 
-    :param rho:
-    :param E:
-    :param nu:
-    :param ldim:
-    :param h:
+    :param rho: density [kg/m^3]
+    :param E: Young's mod [Pa]
+    :param nu: poisson's ratio
+    :param ldim: plate dimensions in meters [Lx, Ly, Lz], where Lz is thickness
+    :param h: grid spacing
     :param BCs:
-    :param Nmodes:
-    :param plot_type:
+    :param Nm: Number of modes, if 0 maximum number of modes are calculated
+    :param plot_type: style to plot mode shapes 'chladni' or '3D'
     :return:
     """
+    ## Validate
+    assert rho is not None
+    assert E  is not None
+    assert nu is not None
+    assert len(ldim) == 3
+    assert h is not None
+    assert BCs.shape == (4, 2)
+    assert Nm is not None and Nm >= 0
+    assert plot_type in ["chladni", "3D", "none"] or plot_type is None
     ##----------------------------
     Lx, Ly, Lz = ldim
     D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
     Nx = int(np.ceil(Lx / h))
     Ny = int(np.ceil(Ly / h))
+    Nmodes = (Nx * Ny) if Nm == 0 else Nm
     ##----------------------------
     ## Build BiHarmonic
     biharm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
@@ -78,7 +88,7 @@ def main():
     BCs[0,:] = 1e15
 
     matplotlib.use('macosx')
-    return magpie(rho, E, nu, ldim, h, BCs, Nmodes, 'chladni')
+    return magpie(rho, E, nu, ldim, h, BCs)
 
 if __name__ == '__main__':
 
