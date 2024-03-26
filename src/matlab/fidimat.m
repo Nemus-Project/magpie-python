@@ -176,11 +176,16 @@ function FDMat = fidimat(arg1,arg2,arg3,arg4)
       XX(1,2) = (bctype-1)*2; XX(m,m-1) = (bctype-1)*2;
       FDMat = kron(XX,Iy)^2;
     
-    case {'grad', 'xy'}
+    case 'grad'
       Y = spdiags([-ones(l,1),zeros(l,1),ones(l,1)],[-1:1],speye(l));
       X = spdiags([-ones(m,1),zeros(m,1),ones(m,1)],[-1:1],speye(m));
       FDMat = kron(X,Iy) + kron(Ix,Y);
 
+    case 'xy'
+      Y = spdiags([-ones(l,1),zeros(l,1),ones(l,1)],[-1:1],speye(l));
+      X = spdiags([-ones(m,1),zeros(m,1),ones(m,1)],[-1:1],speye(m));
+      FDMat = kron(X,Iy) * kron(Ix,Y);
+      
     case 'xxyy'
       YY = spdiags([ones(l,1),-2*ones(l,1),ones(l,1)],-1:1,speye(l));
       YY = spdiags([ones(l,1),-2*ones(l,1),ones(l,1)],-1:1,speye(l));
