@@ -1,4 +1,4 @@
-function [Om,Q,Nx,Ny,biHarm,Dm] = magpie(rho,E,nu,ldim,h,BCs,Nm,plot_type)
+function [Om,Q,Nx,Ny,biHarm] = magpie(rho,E,nu,ldim,h,BCs,Nm,plot_type)
 % MAGPIE What does this do?
 %   [Om,Q,Nx,Ny,biHarm] = MAGPIE (density, Youngs, poisson, dim, h, BCs, Number_of_modes, plot_type)
 %   A function that returns:
