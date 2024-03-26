@@ -48,6 +48,13 @@ function [Om,Q,Nx,Ny,biHarm,Dm] = magpie(rho,E,nu,ldim,h,BCs,Nm,plot_type)
 %           BCs = ones(4,2) * 1e15      %-- elastic constants around the edges
 %
 %           [Om,Q,Nx,Ny,biHarm,Dm] = magpie(rho, E, nu, ldim, h, BCs, Nm,'none');
+%% Varargs
+if nargin < 8
+    plot_type = 'none';
+end
+if nargin < 7
+    Nm = 0;
+end
 %% Validation
 validateattributes(rho,      {'double'}, {'nonempty'});
 validateattributes(E,        {'double'}, {'nonempty'});
@@ -55,7 +62,7 @@ validateattributes(nu,       {'double'}, {'nonempty'});
 validateattributes(ldim,     {'double'}, {'numel', 3});
 validateattributes(h,        {'double'}, {'nonempty'});
 validateattributes(BCs,      {'double'}, {'size', [4,2]});
-% validateattributes(Nmodes,   {'numeric'}, {'integer','positive'});
+validateattributes(Nm,   {'numeric'}, {'integer','nonnegative'});
 validatestring(plot_type,["chladni","3D","none"]);
 
 %% Unpack array variables
