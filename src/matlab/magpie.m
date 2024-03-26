@@ -1,6 +1,6 @@
 function [Om,Q,Nx,Ny,biHarm,Dm] = magpie(rho,E,nu,ldim,h,BCs,Nm,plot_type)
 % MAGPIE What does this do?
-%   [Om,Q,Nx,Ny,biHarm] = MAGPIE (rho,E,nu,Lx,Ly,Lz,h,K0y,R0y,Kx0,Rx0,KLy,RLy,KxL,RxL,Nmodes)
+%   [Om,Q,Nx,Ny,biHarm] = MAGPIE (density, Youngs, poisson, dim, h, BCs, Number_of_modes, plot_type)
 %   A function that returns:
 %           Om      : Angular modal frequencies
 %           Q       : A matrix of column eigenvector(s)
