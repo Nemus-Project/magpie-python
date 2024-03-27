@@ -33,13 +33,13 @@ def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarra
     D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
     Nx = int(np.ceil(Lx / h))
     Ny = int(np.ceil(Ly / h))
-    Nmodes = (Nx * Ny) if Nm == 0 else Nm
+    Nmodes = ((Nx * Ny) - 2) if Nm == 0 else Nm
     ##----------------------------
     ## Build BiHarmonic
     biharm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
 
     ## EIGENVALUES
-    [Dm, Q] = eigs(biharm, Nmodes, sigma=base_mode, which='LR')
+    [Dm, Q] = eigs(biharm, k=Nmodes, sigma=base_mode, which='LR')
 
     Om = np.sqrt(abs(Dm)) * np.sqrt(D / rho / Lz) 
     hz = Om / (2 * np.pi)
