@@ -1,24 +1,31 @@
 import numpy as np
 from numpy.linalg import pinv
 from magpie import magpie
+import sounddevice as sd
+from time import sleep
+import wave
+import warnings
 
 
-def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.ndarray, sig: list, maxFreq: float,
-                           pos: dict, T: float = 6, fs: float = 44100, AmpF: float = 30, twid: float = 0.0006):
+def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.ndarray,
+                           sig: list, maxFreq: float, pos: dict, T: float = 0.25,
+                           fs: float = 44100, AmpF: float = 30, twid: float = 0.0006,
+                           file_path: str = None):
     """
     
     :param rho:
     :param E:
     :param nu:
     :param ldim:
-    :param maxFreq:
     :param BCs:
     :param sig:
+    :param maxFreq:
     :param pos:
     :param T:
     :param fs:
     :param AmpF:
     :param twid:
+    :param file_path:
     :return:
     """
 
@@ -29,7 +36,7 @@ def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.
 
     # --- Simulation Parameters
 
-    Ts = np.round(T * fs)
+    Ts = int(np.round(T * fs))
     k = 1 / fs
     tv = np.r_[:Ts] * k  # -- time axis array
     fv = np.r_[:Ts] * fs / Ts  # -- freq axis array
@@ -96,7 +103,7 @@ def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.
     JoutL[int((Ny) * (Mout + 1) + Nout + 2)] = (1 - alx) * (1 - aly)
 
     # -- right output weights (in interp)
-    JoutR = np.zeros(((Nx ) * (Ny )))
+    JoutR = np.zeros(((Nx) * (Ny)))
 
     outx = out_coord['r'][0] * Nx
     Mout = np.floor(outx)
@@ -119,31 +126,45 @@ def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.
     # --- init
     vm = np.zeros((Nmodes))
     v0 = np.zeros((Nmodes))
-    outL = np.zeros((Ts))
-    outR = np.zeros((Ts))
-    velL = np.zeros((Ts))
-    velR = np.zeros((Ts))
-    outLprev = 0
-    outRprev = 0
+    displacement = np.zeros((Ts, 2))
+    velocity = np.zeros((Ts, 2))
+    out_prev = np.array((0, 0))
 
+    B = 2 * np.exp(-C * k) * np.cos(OmD * k)
+    A = np.exp(-2 * C * k)
+    k2 = (k ** 2)
     # ----------------------------------
     # -- main loop
     for n in range(Ts):
-        vp = 2 * np.exp(-C * k) * np.cos(OmD * k) * v0 - np.exp(-2 * C * k) * vm + (k ** 2) * Jin * fin[n]
-        outLcur = JoutL @ (Q @ v0)
-        outRcur = JoutR @ (Q @ v0)
-        outL[n] = outLcur
-        outR[n] = outRcur
-        velL[n] = (outLcur - outLprev) / k
-        velR[n] = (outRcur - outRprev) / k
+        vp = B * v0 - A * vm + k2 * Jin * fin[n]
+        out_cur = np.array((JoutL @ (Q @ v0), JoutR @ (Q @ v0)))
+        displacement[n, :] = out_cur
+        velocity[n, :] = (out_cur - out_prev)
+
         vm, v0 = v0, vp
+        out_prev = out_cur
 
-        outLprev, outRprev = outLcur, outRcur
+    if file_path is not None:
+        # Convert to (little-endian) 16 bit integers.
+        norm_gain = np.abs(velocity).max()
 
-    out = [outL, outR]
-    vel = [velL, velR]
+        if norm_gain == 0.0:
+            warnings.warn("Warning: output audio is silent. Check you scheme parameters")
+        else:
+            norm_gain = 1.0 / norm_gain
 
-    return out, vel
+        audio = ((velocity * norm_gain) * (2 ** 15 - 1)).astype("<h")
+
+        if not file_path.endswith('.wav'):
+            file_path += ".wav"
+
+        with wave.open(file_path, "w") as f:
+            f.setnchannels(2)  # 2 Channels.
+            f.setsampwidth(2)  # 2 bytes per sample.
+            f.setframerate(fs)
+            f.writeframes(audio.tobytes())
+
+    return velocity, displacement
 
 
 if __name__ == '__main__':
@@ -168,4 +189,11 @@ if __name__ == '__main__':
         'r': [0.56, 0.65]
     }
 
-    modal_time_integration(rho, E, nu, ldim, BCs, sig, maxFreq, pos)
+    simulation_time = 1.0
+
+    audio, _ = modal_time_integration(rho, E, nu, ldim, BCs, sig, maxFreq, pos, T=simulation_time, file_path="test")
+    norm_gain = np.abs(audio).max()
+    audio /= norm_gain
+    sd.play(audio, 44100)
+
+    sleep(simulation_time)
