@@ -1,10 +1,15 @@
 import numpy as np
-from bhmat import bhmat
 from scipy.sparse import *
 from scipy.sparse.linalg import eigs
 from scipy.sparse import eye
 import matplotlib
 from matplotlib import pyplot as plt
+
+try:
+    from bhmat import bhmat
+except ImportError:
+    from .bhmat import bhmat
+    
 
 
 def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nm: int = 0, plot_type: str = None,
@@ -363,16 +368,16 @@ def benchmark_eigs():
 
         biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
 
-        avg_time10 = timeit.repeat(lambda: eigs(biHarm, k=10, sigma=0.0, which="LR"),
-                                   number=1,)
+        avg_time10 = timeit.repeat(lambda: eigs(biHarm, k=k0, sigma=0.0, which="LR"),
+                                   number=1, )
         print("10", end=" ")
-        avg_time20 = timeit.repeat(lambda:eigs(biHarm, k=20,sigma=0.0,which="LR"),
+        avg_time20 = timeit.repeat(lambda: eigs(biHarm, k=20, sigma=0.0, which="LR"),
                                    number=1)
         print("20", end=" ")
-        avg_time50 = timeit.repeat(lambda:eigs(biHarm, k=50,sigma=0.0,which="LR"),
+        avg_time50 = timeit.repeat(lambda: eigs(biHarm, k=50, sigma=0.0, which="LR"),
                                    number=1)
         print("30", end=" ")
-        result = [Nx * Ny   , min(avg_time10), min(avg_time20), min(avg_time50)]
+        result = [Nx * Ny, min(avg_time10), min(avg_time20), min(avg_time50)]
 
         results.append(result)
 
@@ -392,19 +397,41 @@ def benchmark_eigs():
 
 
 if __name__ == '__main__':
-    benchmark_eigs()
-# magpie_ = Magpie()
-# print(magpie_.temp)
-# Q, Om, N, biharm = main()
+    # benchmark_eigs()
 
-# Nmodes = Q.shape[1]
-# sq = int(np.ceil(np.sqrt(Nmodes)))
-#
-# X = np.arange(0, N['y'])
-# Y = np.arange(0, N['x'])
-# X, Y = np.meshgrid(X, Y)
-# for m in range(Nmodes):
-#     plt.subplot(sq, sq, m+1)
-#     Z = np.real(np.reshape(Q[:, m], [N['x'], N['y']]))
-#     plt.pcolormesh(X,Y, Z, cmap='copper', shading='gouraud')
-# plt.show()
+    BCs = np.zeros((4, 2))  # -- elastic constants around the edges
+    Lz = 1e-3
+    nu = 0.3
+    E = 1e9
+    h = 0.01
+    Nx = int(250)
+    Ny = int(250)
+    h = 0.01
+    k = 20
+    rho = 7000
+    D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
+
+    eig_to_freq = lambda w: np.sqrt(np.abs(np.real(w))) * np.sqrt(D / rho / Lz)
+
+    import timeit
+
+    formats = ['bsr', 'coo', 'csc', 'csr', 'dia', 'dok', 'lil']
+
+    for format in formats:
+        biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu, format=format)
+        print("Sigma: 0.0, LM " + format, end=': ')
+        t = timeit.repeat(lambda: eigsh(biHarm,  # biharmonic
+                                        k=k,  # number of eigen values
+                                        M=None,  # We don't have
+                                        sigma=5.566171537907070e-06,  # 0.01?
+                                        which='LM',  # ‘LM’ | ‘SM’ | ‘LR’ | ‘SR’
+                                        mode='normal',
+                                        v0=None,  # nope
+                                        ncv=None,  # nope
+                                        maxiter=None,  # to test
+                                        tol=0,  # to test
+                                        return_eigenvectors=False,
+                                        Minv=None,  # nope
+                                        OPinv=None),  # nope,
+                          number=1, repeat=10)
+        print(min(t), "seconds")

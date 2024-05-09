@@ -1,8 +1,13 @@
-from Dxx_coeffs import *
 import numpy as np
 from scipy.sparse import *
 
-def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float):
+try:
+    from Dxx_coeffs import *
+except ImportError:
+    from .Dxx_coeffs import *
+
+
+def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float, format:str='dia'):
     """
     bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float):
 
@@ -281,7 +286,7 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
                      range(Nx-4)],
                    [*[None] * (Nx - 4), BlkMm1Mm3, BlkMm1Mm2, BlkMm1Mm1, BlkMm1M],
                    [*[None] * (Nx - 3), BlkMMm2, BlkMMm1, BlkMM]
-                   ])
+                   ], format=format)
 
     return biharm / (h ** 4)
 
@@ -325,10 +330,8 @@ if __name__ == '__main__':
         Nx = 10 * n
         Ny = 1000
 
-        avg_time = timeit.repeat('bhmat(BCs, [Nx, Ny], h, Lz, E, nu)',
-                                 number=10,
-                                 setup="from __main__ import bhmat",
-                                 globals=globals())
+        avg_time = timeit.repeat(lambda: bhmat(BCs, [Nx, Ny], h, Lz, E, nu),
+                                 number=10)
         result = [Nx*Ny, min(avg_time)]
         results.append(result)
         print(result)

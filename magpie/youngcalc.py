@@ -1,6 +1,9 @@
 import numpy as np
-from magpie import magpie
 
+try:
+    from magpie import magpie
+except ImportError:
+    from .magpie import magpie
 
 def youngcalc(rho: float, ldim: list, h: float, BCs: np.ndarray, ExpFreq: list, Ntrain: int, should_plot: bool = False):
     """
