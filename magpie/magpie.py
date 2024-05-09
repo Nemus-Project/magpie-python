@@ -46,6 +46,8 @@ def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarra
     Om = np.sqrt(abs(Dm)) * np.sqrt(D / rho / Lz)
     hz = Om / (2 * np.pi)
     indSort = np.argsort(Dm)
+    
+    Om = Om[indSort]
     Q = Q[:, indSort]
 
     X = np.arange(0, Ny)
