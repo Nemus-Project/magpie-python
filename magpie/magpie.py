@@ -292,57 +292,6 @@ class Magpie():
         cls.E = ELS
         cls.magpie(Nm=Ntrain)
 
-        # if Ntrain < Nmodes
-        #
-        #     subplot(2, 2, 1)
-        #     Y = [TrainFreq, NumFreq(1:Ntrain)];
-        #     X = 1:Ntrain;
-        #     bar(X, Y)
-        #     xlabel('Mode Number');
-        #     ylabel('f (Hz)')
-        #     legend('Exp', 'Num')
-        #     title('Training Set')
-        #
-        #     subplot(2, 2, 3)
-        #     errTrain = (1 - Y(:, 2). / Y(:, 1))*100;
-        #     bar(X, errTrain)
-        #     xlabel('Mode Number');
-        #     ylabel('rel err (%)')
-        #
-        #     subplot(2, 2, 2)
-        #     Y = [TestFreq, NumFreq(Ntrain + 1:end)];
-        #     X = Ntrain + 1:Nmodes;
-        #     bar(X, Y)
-        #     xlabel('Mode Number');
-        #     ylabel('f (Hz)')
-        #     legend('Exp', 'Num')
-        #     title('Testing Set')
-        #
-        #     subplot(2, 2, 4)
-        #     errTest = (1 - Y(:, 2). / Y(:, 1))*100;
-        #     bar(X, errTest)
-        #     xlabel('Mode Number');
-        #     ylabel('rel err (%)')
-        #
-        # else
-        #
-        #     subplot(2, 1, 1)
-        #     Y = [TrainFreq, NumFreq(1:Ntrain)];
-        #     X = 1:Ntrain;
-        #     bar(X, Y)
-        #     xlabel('Mode Number');
-        #     ylabel('f (Hz)')
-        #     legend('Exp', 'Num')
-        #     title('Training Set')
-        #
-        #     subplot(2, 1, 2)
-        #     errTrain = (1 - Y(:, 2). / Y(:, 1))*100;
-        #     bar(X, errTrain)
-        #     xlabel('Mode Number');
-        #     ylabel('rel err (%)')
-        #
-        # end
-
         return ELS
 
 
@@ -395,20 +344,17 @@ def benchmark_eigs():
         write.writerow(fields)
         write.writerows(results)
 
-
-if __name__ == '__main__':
-    # benchmark_eigs()
-
+def benchmark_eigs():
     BCs = np.zeros((4, 2))  # -- elastic constants around the edges
     Lz = 1e-3
     nu = 0.3
-    E = 1e9
+    E = 200e9
     h = 0.01
     Nx = int(250)
     Ny = int(250)
     h = 0.01
     k = 20
-    rho = 7000
+    rho = 7820
     D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
 
     eig_to_freq = lambda w: np.sqrt(np.abs(np.real(w))) * np.sqrt(D / rho / Lz)
@@ -420,18 +366,33 @@ if __name__ == '__main__':
     for format in formats:
         biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu, format=format)
         print("Sigma: 0.0, LM " + format, end=': ')
-        t = timeit.repeat(lambda: eigsh(biHarm,  # biharmonic
-                                        k=k,  # number of eigen values
-                                        M=None,  # We don't have
-                                        sigma=5.566171537907070e-06,  # 0.01?
-                                        which='LM',  # ‘LM’ | ‘SM’ | ‘LR’ | ‘SR’
-                                        mode='normal',
-                                        v0=None,  # nope
-                                        ncv=None,  # nope
-                                        maxiter=None,  # to test
-                                        tol=0,  # to test
-                                        return_eigenvectors=False,
-                                        Minv=None,  # nope
-                                        OPinv=None),  # nope,
+        t = timeit.repeat(lambda: eigs(biHarm,  # biharmonic
+                                       k=k,  # number of eigen values
+                                       M=None,  # We don't have
+                                       sigma=5.566171537907070e-06,  # 0.01?
+                                       which='LM',  # ‘LM’ | ‘SM’ | ‘LR’ | ‘SR’
+                                       mode='normal',
+                                       v0=None,  # nope
+                                       ncv=None,  # nope
+                                       maxiter=None,  # to test
+                                       tol=0,  # to test
+                                       return_eigenvectors=False,
+                                       Minv=None,  # nope
+                                       OPinv=None),  # nope,
                           number=1, repeat=10)
         print(min(t), "seconds")
+
+def magpie_test():
+    BCs = np.ones((4, 2)) * 1e15  # -- elastic constants around the edges
+
+    rho = 7820
+    E = 200e9
+    nu = 0.3
+    h = 0.01
+
+    [Om, Q, N, biharm] = magpie(rho,E,nu,[1,0.8,5e-3],0.01,BCs,5)
+    print(Om)
+
+if __name__ == '__main__':
+    magpie_test()
+
