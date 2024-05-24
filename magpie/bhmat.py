@@ -294,59 +294,53 @@ def main():
     Lx = 1.10
     Ly = 0.8
     Lz = 5e-3
-    ldim = [Lx, Ly, Lz]  # -- plate dimensions [x, y, z] in metres
     E = 9.0e+9  # -- Young's mod [Pa]
-    rho = 8765  # -- density [kg/m^3]
     nu = 0.3  # -- poisson's ratio
-    Nmodes = 4  # -- number of modes to compute
     h = np.sqrt(Lx * Ly) * 0.01  # -- grid spacing
     BCs = np.ones((4, 2)) * 1e15  # -- elastic constants around the edges
 
-    D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
-    Nx = int(np.floor(Lx / h))
-    Ny = int(np.floor(Ly / h))
-
     Nx = 250
-    Ny = 2500
+    Ny = 250
 
-    # biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
+    biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
 
 
 
 
 if __name__ == '__main__':
-    import timeit
-
-    Lz = 1e-3
-    E = 1e9
-    nu = 0.3  # -- poisson's ratio
-    h = 0.01  # -- grid spacing
-    BCs = np.zeros((4, 2)) * 1e15  # -- elastic constants around the edges
-    BCs[:, 0] = 1e15
-
-    results = []
-
-    for n in range(150, 0, -1):
-        Nx = 10 * n
-        Ny = 1000
-
-        avg_time = timeit.repeat(lambda: bhmat(BCs, [Nx, Ny], h, Lz, E, nu),
-                                 number=10)
-        result = [Nx*Ny, min(avg_time)]
-        results.append(result)
-        print(result)
-
-
-
-    import csv
-
-    with open('python-timings.csv', 'w') as f:
-
-        fields = ['points', 'seconds']
-        write = csv.writer(f)
-
-        write.writerow(fields)
-        write.writerows(results)
+    main()
+    # import timeit
+    #
+    # Lz = 1e-3
+    # E = 1e9
+    # nu = 0.3  # -- poisson's ratio
+    # h = 0.01  # -- grid spacing
+    # BCs = np.zeros((4, 2)) * 1e15  # -- elastic constants around the edges
+    # BCs[:, 0] = 1e15
+    #
+    # results = []
+    #
+    # for n in range(150, 0, -1):
+    #     Nx = 10 * n
+    #     Ny = 1000
+    #
+    #     avg_time = timeit.repeat(lambda: bhmat(BCs, [Nx, Ny], h, Lz, E, nu),
+    #                              number=10)
+    #     result = [Nx*Ny, min(avg_time)]
+    #     results.append(result)
+    #     print(result)
+    #
+    #
+    #
+    # import csv
+    #
+    # with open('python-timings.csv', 'w') as f:
+    #
+    #     fields = ['points', 'seconds']
+    #     write = csv.writer(f)
+    #
+    #     write.writerow(fields)
+    #     write.writerows(results)
 
 
 
