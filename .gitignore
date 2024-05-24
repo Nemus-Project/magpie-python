@@ -14,3 +14,7 @@
 *.asv
 *__pycache__/
 *-checkpoint.ipynb
+
+nemus_magpie.egg-info/*
+dist/*
+build/*
