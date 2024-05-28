@@ -6,34 +6,33 @@ except ImportError:
     from .magpie import magpie
 
 def youngcalc(rho: float, ldim: list, h: float, BCs: np.ndarray, ExpFreq: list, Ntrain: int, should_plot: bool = False):
-    """
-    Estimate Young's modulus (E) of an experimental plate starting from a batch
+    """Estimate Young's modulus (E) of an experimental plate starting from a batch
     of experimentally measured frequencies, leveraging MAGPIE
     
     Example usage:
-    
-    ```
-    ExpFreq = [73.2 148 376 431 559 910]   #-- these are measured from a plate
-    rho     = 8765             #-- density [kg/(m ** 3)]
-    Lx      = 0.1
-    Ly      = 0.08
-    Lz      = 0.00081
+    .. code:: python
+    :number-lines:
 
-    BCs = [0,    0
-           1e15, 1e15
-           0,    0
-           0,    0]
+        ExpFreq = [73.2 148 376 431 559 910]   #-- these are measured from a plate
+        rho     = 8765             #-- density [kg/(m ** 3)]
+        Lx      = 0.1
+        Ly      = 0.08
+        Lz      = 0.00081
 
-    ldim    = [Lx Ly Lz]
-    h       = np.sqrt(Lx*Ly)*0.01   #-- grid spacing [m]
+        BCs = [0,    0
+            1e15, 1e15
+            0,    0
+            0,    0]
 
-    E  = youngcalc(rho,ldim,h,BCs,ExpFreq,3)
-    ```
-     
+        ldim    = [Lx Ly Lz]
+        h       = np.sqrt(Lx*Ly)*0.01   #-- grid spacing [m]
+
+        E  = youngcalc(rho,ldim,h,BCs,ExpFreq,3)
+
     :param rho: the experimental plate density 
-    :param ldim:  a 3X1 array containing the Lx Ly Lz dimensions
+    :param ldim:  a 3 x 1 array containing the Lx Ly Lz dimensions
     :param h: the grid spacing of the FD scheme 
-    :param BCs: a 4X2 array containing the rigidities of the boundary supports of the experimental plate 
+    :param BCs: a 4 x 2 array containing the rigidities of the boundary supports of the experimental plate 
     :param ExpFreq: an array contaning the first Nmodes measured modal frequencies 
     :param Ntrain: an integer. Must be <= Nmodes. It is the number of training modes out of the available batch 
     :return: The estimated young's modulus for the given plate

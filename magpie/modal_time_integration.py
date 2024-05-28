@@ -11,7 +11,7 @@ def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.
                            sig: list, maxFreq: float, pos: dict, T: float = 0.25,
                            fs: float = 44100, AmpF: float = 30, twid: float = 0.0006,
                            file_path: str = None):
-    """
+    """Generate an impulse response using modal time integration
     
     :param rho:  density [kg/m^3] 
     :param E:    Young's mod [Pa] 

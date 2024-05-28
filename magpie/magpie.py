@@ -12,10 +12,8 @@ except ImportError:
     
 
 
-def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nm: int = 0, plot_type: str = None,
-           base_mode: float = 0.0):
-    """
-    The central magpie function which will compute angular mode frequencies,
+def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nm: int = 0, plot_type: str = None, base_mode: float = 0.0):
+    """The central magpie function which will compute angular mode frequencies,
     eigen vectors of the first N modes. 
     
     :param rho:  density [kg/m^3] 
@@ -27,13 +25,11 @@ def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarra
     :param BCs: boundary conditions as a numpy array of 4 rows and 2 columns.
         The first column represents the transversal condition and the second
         column the rotational condition. e.g. 
-        ```
-        BCs = np.zeros(4,2) # free conditions       
-        BCs = [0,    0
+        `` BCs = np.zeros(4,2) # free conditions``
+        ``BCs = [0,    0
                1e15, 1e15 # clamped on one side
                0,    0
-               0,    0]
-        ```
+               0,    0]``
     :param Nm: Number of modes, if 0 maximum number of modes are calculated
     :param plot_type: style to plot mode shapes 'chladni' or '3D'
     :return: [Om, Q, {'x': Nx, 'y': Ny}, biharm] where Om is an array of modes

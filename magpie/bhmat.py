@@ -8,8 +8,9 @@ except ImportError:
 
 
 def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float, format:str='dia'):
-    """
-    bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float):
+    """Generate a biharmonic matrix for a plate of given parameters
+    
+    :function bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float):
 
     :param BCs: boundary conditions as a numpy array of 4 rows and 2 columns.
         The first column represents the transversal condition and the second
