@@ -13,20 +13,39 @@ def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.
                            file_path: str = None):
     """
     
-    :param rho:
-    :param E:
-    :param nu:
-    :param ldim:
-    :param BCs:
-    :param sig:
-    :param maxFreq:
-    :param pos:
-    :param T:
-    :param fs:
-    :param AmpF:
-    :param twid:
-    :param file_path:
-    :return:
+    :param rho:  density [kg/m^3] 
+    :param E:    Young's mod [Pa] 
+    :param nu:   poisson's ratio 
+    :param ldim: plate dimensions in meters [Lx, Ly, Lz], where Lz is thickness    
+    :param BCs: boundary conditions as a numpy array of 4 rows and 2 columns.
+        The first column represents the transversal condition and the second
+        column the rotational condition. e.g. BCs = np.zeros(4,2) would be a
+        free conditions       
+    :param Nm: Number of modes, if 0 maximum number of modes are calculated
+    :param sig: A 2 element list representing frerquency dependant loss
+        coefficients where T60 = 3*log(10)./(sig[0]+Om.^2*sig[1])
+    :param maxFreq: Maximum frequency to consider when creating the simulation
+    :param pos: dictionary of input output coordinates. Expectes the keys     
+    
+    ```
+    pos = {
+        'in': [x, y],
+        'l':  [x, y],
+        'r':  [x, y]
+    }
+    ```
+
+    The x and y are normalised coefficientsa that should be greater than 0 and
+    less than 1
+
+    :param T: Time in seconds of the simulation
+    :param fs: sampling rate of the ouput
+    :param AmpF: amplitude of the input force
+    :param twid: length in seconds of the input force
+    :param file_path: output .wav  file path
+    :return: [velocity, displacement] where velocity is the output velocity
+        signal and displacement is the output displacement signal. Both output
+        signals are returned as numpy arrays
     """
 
     Lx, Ly, Lz = ldim
@@ -191,7 +210,7 @@ if __name__ == '__main__':
 
     simulation_time = 1.0
 
-    audio, _ = modal_time_integration(rho, E, nu, ldim, BCs, sig, maxFreq, pos, T=simulation_time, file_path="test")
+    audio, _ = modal_time_integration(rho, E, nu, ldim, BCs, sig, maxFreq, pos, T=simulation_time)
     norm_gain = np.abs(audio).max()
     audio /= norm_gain
     sd.play(audio, 44100)

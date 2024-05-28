@@ -1,6 +1,5 @@
 def D00_coeffs(K0y, R0y, Kx0, Rx0, h, D, nu):
     """
-
     :param K0y:
     :param R0y:
     :param Kx0:
