@@ -7,7 +7,8 @@ except ImportError:
 
 def youngcalc(rho: float, ldim: list, h: float, BCs: np.ndarray, ExpFreq: list, Ntrain: int, should_plot: bool = False):
     """
-    Estimate Young's modulus (E) of an experimental plate starting from a batch of experimentally measured frequencies, leveraging MAGPIE
+    Estimate Young's modulus (E) of an experimental plate starting from a batch
+    of experimentally measured frequencies, leveraging MAGPIE
     
     Example usage:
     
