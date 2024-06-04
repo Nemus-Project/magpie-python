@@ -8,20 +8,44 @@ except ImportError:
 
 
 def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float, format:str='dia'):
-    """Generate a biharmonic matrix for a plate of given parameters
-    
-    :function bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: float):
+    """
+    Generate a biharmonic matrix for a plate of given parameters
 
     :param BCs: boundary conditions as a numpy array of 4 rows and 2 columns.
         The first column represents the transversal condition and the second
-        column the rotational condition. e.g. BCs = np.zeros(4,2) would be a
-        free conditions       
+        column the rotational condition. e.g. :code:`BCs = np.zeros(4,2)` would be a
+        free conditions.
+    :type BCs: np.ndarray or list
     :param Nxy: Number of grad points [Nx Ny]
+    :type Nxy: np.ndarray:
     :param h:   Grid spacing
+    :type h: float
     :param Lz:  plate thickness
+    :type Lz: float
     :param E:   Young's mod [Pa]
+    :type E: float
     :param nu:  poisson's ratio
+    :type nu: float
     :return: biharmonic matrix size (Nx Ny)
+    :rtype: np.ndarray:
+
+    :Example:
+
+    .. code-block:: python
+        :linenos:
+
+        Lz = 5e-3
+        E = 9.0e+9  # -- Young's mod [Pa]
+        nu = 0.3  # -- poisson's ratio
+        h = np.sqrt(Lx * Ly) * 0.01  # -- grid spacing
+        BCs = np.ones((4, 2)) * 1e15  # -- elastic constants around the edges
+
+        Nx = 250
+        Ny = 250
+
+        biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
+
+
     """
     ## validate
     assert BCs.shape == (4, 2)

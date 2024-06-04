@@ -13,29 +13,56 @@ except ImportError:
 
 
 def magpie(rho: float, E: float, nu: float, ldim: list, h: float, BCs: np.ndarray, Nm: int = 0, plot_type: str = None, base_mode: float = 0.0):
-    """The central magpie function which will compute angular mode frequencies,
+    """
+    The central magpie function which will compute angular mode frequencies,
     eigen vectors of the first N modes. 
     
-    :param rho:  density [kg/m^3] 
-    :param E:    Young's mod [Pa] 
-    :param nu:   poisson's ratio 
+    :param rho:  density [kg/m^3]
+    :type rho: float
+    :param E:    Young's mod [Pa]
+    :type E: float
+    :param nu:   poisson's ratio
+    :type nu: float
     :param ldim: plate dimensions in meters [Lx, Ly, Lz], where Lz is thickness
+    :type ldim: list
     :param h: grid spacing. A good convention is to use a percentage of the
-        square root of the Area sqrt(Lx*Ly) * p where p < 1.0
+        square root of the Area :math:`\sqrt{Lx*Ly} * p` where 0.0 < p < 1.0
+    :type h: float
     :param BCs: boundary conditions as a numpy array of 4 rows and 2 columns.
         The first column represents the transversal condition and the second
-        column the rotational condition. e.g. 
-        `` BCs = np.zeros(4,2) # free conditions``
-        ``BCs = [0,    0
-               1e15, 1e15 # clamped on one side
-               0,    0
-               0,    0]``
+        column the rotational condition. e.g. :code:`BCs = np.zeros(4,2) # free conditions`
+
+    .. code-block:: python
+
+        BCs = np.array([[0,0],
+                       [1e15,1e15],
+                       [0,0],
+                       [0,0],])
+
+    :type BCs: np.ndarray
     :param Nm: Number of modes, if 0 maximum number of modes are calculated
+    :type Nm: int
     :param plot_type: style to plot mode shapes 'chladni' or '3D'
-    :return: [Om, Q, {'x': Nx, 'y': Ny}, biharm] where Om is an array of modes
+    :type plot_type: str
+    :return: :code:`[Om, Q, {'x': Nx, 'y': Ny}, biharm]` where Om is an array of modes
         as angular frequencies. Q is the eigenvectors of those modes. A
         dictionary of the number of points in the x and y axis is returned a
-        long with the biharmonic `biharm`
+        long with the biharmonic :code:`biharm`
+    :rtype: list of :code:`[numpy.ndarray, numpy.ndarray, dict, numpy.ndarray]`
+
+    :Example:
+
+    .. code-block:: python
+        :linenos:
+
+        BCs = np.ones((4, 2)) * 1e15
+
+        rho = 7820
+        E = 200e9
+        nu = 0.3
+        h = 0.01
+
+        [Om, Q, N, biharm] = magpie(rho,E,nu,[1,0.8,5e-3],0.01,BCs,5)
     """
     ## Validate
     assert rho is not None

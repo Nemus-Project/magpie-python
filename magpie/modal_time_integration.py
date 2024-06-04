@@ -11,29 +11,42 @@ def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.
                            sig: list, maxFreq: float, pos: dict, T: float = 0.25,
                            fs: float = 44100, AmpF: float = 30, twid: float = 0.0006,
                            file_path: str = None):
-    """Generate an impulse response using modal time integration
+    """
+    Generate an impulse response using modal time integration
     
-    :param rho:  density [kg/m^3] 
-    :param E:    Young's mod [Pa] 
-    :param nu:   poisson's ratio 
-    :param ldim: plate dimensions in meters [Lx, Ly, Lz], where Lz is thickness    
+    :param rho:  density [kg/m^3]
+    :type rho: float
+    :param E:    Young's mod [Pa]
+    :type E: float
+    :param nu:   poisson's ratio
+    :type nu: float
+    :param ldim: plate dimensions in meters [Lx, Ly, Lz], where Lz is thickness
+    :type ldim: list
     :param BCs: boundary conditions as a numpy array of 4 rows and 2 columns.
         The first column represents the transversal condition and the second
         column the rotational condition. e.g. BCs = np.zeros(4,2) would be a
-        free conditions       
-    :param Nm: Number of modes, if 0 maximum number of modes are calculated
+        free conditions
+    :type BCs: np.ndarray
     :param sig: A 2 element list representing frerquency dependant loss
         coefficients where T60 = 3*log(10)./(sig[0]+Om.^2*sig[1])
+    :type sig: list
     :param maxFreq: Maximum frequency to consider when creating the simulation
-    :param pos: dictionary of input output coordinates. Expectes the keys     
-    
-    ```
-    pos = {
-        'in': [x, y],
-        'l':  [x, y],
-        'r':  [x, y]
-    }
-    ```
+    :type maxFreq: float
+    :param pos: dictionary of input output coordinates. Expectes the keys
+
+    .. code-block:: python
+        :linenos:
+
+        pos = {
+            'in': [x, y],
+            'l':  [x, y],
+            'r':  [x, y]
+        }
+
+    :type pos: dict
+    :return: velocity and displacement impulse responses
+    :rtype: tuple of class: numpy.ndarray
+
 
     The x and y are normalised coefficientsa that should be greater than 0 and
     less than 1
@@ -46,6 +59,40 @@ def modal_time_integration(rho: float, E: float, nu: float, ldim: list, BCs: np.
     :return: [velocity, displacement] where velocity is the output velocity
         signal and displacement is the output displacement signal. Both output
         signals are returned as numpy arrays
+
+    .. code-block:: python
+
+        import sounddevice as sd
+
+        rho = 8765  # -- density [kg/m^3]
+        E = 101e9  # -- Young's mod [Pa]
+        nu = 0.3  # -- poisson's ratio
+
+        ldim = [0.151, 0.08, 0.81e-3]
+
+        # elastic constants around the edges (this allows to set the various bcs)
+        BCs = np.zeros((4, 2)) * 1e15  # -- elastic constants around the edges
+        BCs[1, :] = 1e15
+
+        sig = [5e-3, 3e-9]  # -- damping parameters: T60 = 3*log(10)./(sig0+Om.^2*sig1)
+
+        maxFreq = 15000.0  # max frequency to consider in hz
+
+        # -- input / output locations, FRACTIONS of [Lx Ly] (values must be >0 and <1)
+        pos = {
+            'in': [0.54, 0.78],
+            'l': [0.57, 0.75],
+            'r': [0.56, 0.65]
+        }
+
+        simulation_time = 1.0
+
+        audio, _ = modal_time_integration(rho, E, nu, ldim, BCs, sig, maxFreq, pos, T=simulation_time)
+        norm_gain = np.abs(audio).max()
+        audio /= norm_gain
+        sd.play(audio, 44100)
+
+        sleep(simulation_time)
     """
 
     Lx, Ly, Lz = ldim
