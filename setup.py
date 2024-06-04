@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='nemus_magpie',
-    version='0.0.1',
+    version='0.0.5',
     packages=['magpie'],
     url='https://github.com/nemus-Project/magpie-python',
     license='GNU General Public License v3.0',
