@@ -27,7 +27,7 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     :param nu:  poisson's ratio
     :type nu: float
     :return: biharmonic matrix size (Nx Ny)
-    :rtype: np.ndarray:
+    :rtype: scipy.sparse:
 
     :Example:
 
