@@ -1,3 +1,38 @@
+"""
+magpie
+=====
+
+Provides
+  1. A function for exploring rectangular plates with generalised boundary conditions :code:`magpie`
+  2. A function for generating a biharmonic sparse matrix :code:`bhmat`
+  3. A function for generating impulse responses of a given plate :code:`modal_time_integration`
+  4. A function for generating estimating the young's modulus of a given plate :code:`youngcalc`
+
+How to use the documentation
+----------------------------
+
+
+Utilities
+---------
+
+__version__
+    magpie version string
+
+Viewing documentation using IPython
+-----------------------------------
+
+
+Credits
+-------
+:Authors:
+    Michele Ducceschi
+    Matthew Hamilton
+    Alexis Mousseau
+
+:Version: 1.0 of 2001/01/01
+:Dedication:
+
+"""
 # from . import magpie
 from .magpie import magpie
 # from . import bhmat
