@@ -9,5 +9,5 @@ setup(
     author='NEMUS',
     author_email='michele.ducceschi@unibo.it',
     description='An open source framework for working with thin plates under generalized elastic boundary conditions',
-    install_requires=['numpy', 'scipy','matplotlib','sounddevice']
+    install_requires=['numpy', 'scipy','matplotlib']
 )
