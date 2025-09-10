@@ -1,4 +1,4 @@
-# m<img src="./img/magpie.svg" style="height:1ch;"/>gpie 
+# m<img src="./img/magpie-dark.svg#gh-dark-mode-only" style="height:1ch;"/><img src="./img/magpie-light.svg#gh-light-mode-only" style="height:1ch;"/>gpie 
 
 
 ## About
