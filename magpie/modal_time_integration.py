@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.linalg import pinv
 from magpie import magpie
-import sounddevice as sd
+# import sounddevice as sd
 from time import sleep
 import wave
 import warnings
