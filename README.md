@@ -1,5 +1,5 @@
 # m<img src="./img/magpie-dark.svg#gh-dark-mode-only" style="height:1ch;"/><img src="./img/magpie-light.svg#gh-light-mode-only" style="height:1ch;"/>gpie 
-
+[![DOI](https://zenodo.org/badge/680738225.svg)](https://doi.org/10.5281/zenodo.17131911)
 
 ## About
 
