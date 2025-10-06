@@ -28,7 +28,6 @@ def youngcalc(rho: float, ldim: list, h: float, BCs: np.ndarray, ExpFreq: list, 
     :Example:
 
     .. code:: python
-        :linenos:
 
         ExpFreq = [73.2 148 376 431 559 910]   #-- these are measured from a plate
         rho     = 8765             #-- density [kg/(m ** 3)]
