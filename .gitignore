@@ -19,3 +19,7 @@
 dist/*
 build/*
 docs/*
+
+!docs/conf.py
+!docs/index.rst
+!docs/html/
