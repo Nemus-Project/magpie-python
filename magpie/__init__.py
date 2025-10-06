@@ -1,6 +1,6 @@
 """
 magpie
-=====
+======
 
 Provides
   1. A function for exploring rectangular plates with generalised boundary conditions :code:`magpie`
@@ -160,6 +160,5 @@ __all__ = [
     "magpie",
     "bhmat",
     "youngcalc",
-    "test_sphinx",
     "modal_time_integration",
 ]
