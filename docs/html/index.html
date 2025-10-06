@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to magpie-python’s documentation! &#8212; magpie-python 0.0.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-magpie">
+<span id="welcome-to-magpie-python-s-documentation"></span><h1>Welcome to magpie-python’s documentation!<a class="headerlink" href="#module-magpie" title="Permalink to this heading">¶</a></h1>
+<section id="magpie">
+<h2>magpie<a class="headerlink" href="#magpie" title="Permalink to this heading">¶</a></h2>
+<section id="version-release">
+<h3>Version: 0.0.5<a class="headerlink" href="#version-release" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Provides</dt><dd><ol class="arabic simple">
+<li><p>A function for exploring rectangular plates with generalised boundary conditions <code class="code docutils literal notranslate"><span class="pre">magpie</span></code></p></li>
+<li><p>A function for generating a biharmonic sparse matrix <code class="code docutils literal notranslate"><span class="pre">bhmat</span></code></p></li>
+<li><p>A function for generating impulse responses of a given plate <code class="code docutils literal notranslate"><span class="pre">modal_time_integration</span></code></p></li>
+<li><p>A function for generating estimating the young’s modulus of a given plate <code class="code docutils literal notranslate"><span class="pre">youngcalc</span></code></p></li>
+</ol>
+</dd>
+</dl>
+</section>
+<section id="credits">
+<h3>Credits<a class="headerlink" href="#credits" title="Permalink to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Authors<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Michele Ducceschi
+Matthew Hamilton
+Alexis Mousseau</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="magpie.bhmat">
+<span class="sig-prename descclassname"><span class="pre">magpie.</span></span><span class="sig-name descname"><span class="pre">bhmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BCs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dia'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magpie.bhmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a biharmonic matrix for a plate of given parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BCs</strong> (<em>np.ndarray</em><em> or </em><em>list</em>) – boundary conditions as a numpy array of 4 rows and 2 columns.
+The first column represents the transversal condition and the second
+column the rotational condition. e.g. <code class="code docutils literal notranslate"><span class="pre">BCs</span> <span class="pre">=</span> <span class="pre">np.zeros(4,2)</span></code> would be a
+free conditions.</p></li>
+<li><p><strong>Nxy</strong> (<em>np.ndarray:</em>) – Number of grad points [Nx Ny]</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Grid spacing</p></li>
+<li><p><strong>Lz</strong> (<em>float</em>) – plate thickness</p></li>
+<li><p><strong>E</strong> (<em>float</em>) – Young’s mod [Pa]</p></li>
+<li><p><strong>nu</strong> (<em>float</em>) – poisson’s ratio</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>biharmonic matrix size (Nx Ny)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>scipy.sparse:</p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">Lz</span> <span class="o">=</span> <span class="mf">5e-3</span>
+<span class="linenos"> 2</span><span class="n">E</span> <span class="o">=</span> <span class="mf">9.0e+9</span>  <span class="c1"># -- Young&#39;s mod [Pa]</span>
+<span class="linenos"> 3</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># -- poisson&#39;s ratio</span>
+<span class="linenos"> 4</span><span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Lx</span> <span class="o">*</span> <span class="n">Ly</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span>  <span class="c1"># -- grid spacing</span>
+<span class="linenos"> 5</span><span class="n">BCs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e15</span>  <span class="c1"># -- elastic constants around the edges</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="n">Nx</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="linenos"> 8</span><span class="n">Ny</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="n">biHarm</span> <span class="o">=</span> <span class="n">bhmat</span><span class="p">(</span><span class="n">BCs</span><span class="p">,</span> <span class="p">[</span><span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="n">Lz</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">nu</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magpie.magpie">
+<span class="sig-prename descclassname"><span class="pre">magpie.</span></span><span class="sig-name descname"><span class="pre">magpie</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BCs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magpie.magpie" title="Permalink to this definition">¶</a></dt>
+<dd><p>The central magpie function which will compute angular mode frequencies,
+eigen vectors of the first N modes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<em>float</em>) – density [kg/m^3]</p></li>
+<li><p><strong>E</strong> (<em>float</em>) – Young’s mod [Pa]</p></li>
+<li><p><strong>nu</strong> (<em>float</em>) – poisson’s ratio</p></li>
+<li><p><strong>ldim</strong> (<em>list</em>) – plate dimensions in meters [Lx, Ly, Lz], where Lz is thickness</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – grid spacing. A good convention is to use a percentage of the
+square root of the Area <span class="math notranslate nohighlight">\(\sqrt{Lx*Ly} * p\)</span> where 0.0 &lt; p &lt; 1.0</p></li>
+<li><p><strong>BCs</strong> – boundary conditions as a numpy array of 4 rows and 2 columns.
+The first column represents the transversal condition and the second
+column the rotational condition. e.g. <code class="code docutils literal notranslate"><span class="pre">BCs</span> <span class="pre">=</span> <span class="pre">np.zeros(4,2)</span> <span class="pre">#</span> <span class="pre">free</span> <span class="pre">conditions</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">BCs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+               <span class="p">[</span><span class="mf">1e15</span><span class="p">,</span><span class="mf">1e15</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],])</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Nm</strong> (<em>int</em>) – Number of modes, if 0 maximum number of modes are calculated</p></li>
+<li><p><strong>plot_type</strong> (<em>str</em>) – style to plot mode shapes ‘chladni’ or ‘3D’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="code docutils literal notranslate"><span class="pre">[Om,</span> <span class="pre">Q,</span> <span class="pre">{'x':</span> <span class="pre">Nx,</span> <span class="pre">'y':</span> <span class="pre">Ny},</span> <span class="pre">biharm]</span></code> where Om is an array of modes
+as angular frequencies. Q is the eigenvectors of those modes. A
+dictionary of the number of points in the x and y axis is returned a
+long with the biharmonic <code class="code docutils literal notranslate"><span class="pre">biharm</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of <code class="code docutils literal notranslate"><span class="pre">[numpy.ndarray,</span> <span class="pre">numpy.ndarray,</span> <span class="pre">dict,</span> <span class="pre">numpy.ndarray]</span></code></p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">BCs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e15</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="n">rho</span> <span class="o">=</span> <span class="mi">7820</span>
+<span class="linenos">4</span><span class="n">E</span> <span class="o">=</span> <span class="mf">200e9</span>
+<span class="linenos">5</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="linenos">6</span><span class="n">h</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="linenos">7</span>
+<span class="linenos">8</span><span class="p">[</span><span class="n">Om</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">biharm</span><span class="p">]</span> <span class="o">=</span> <span class="n">magpie</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">nu</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">5e-3</span><span class="p">],</span><span class="mf">0.01</span><span class="p">,</span><span class="n">BCs</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magpie.modal_time_integration">
+<span class="sig-prename descclassname"><span class="pre">magpie.</span></span><span class="sig-name descname"><span class="pre">modal_time_integration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BCs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFreq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">44100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AmpF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">twid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0006</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magpie.modal_time_integration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an impulse response using modal time integration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<em>float</em>) – density [kg/m^3]</p></li>
+<li><p><strong>E</strong> (<em>float</em>) – Young’s mod [Pa]</p></li>
+<li><p><strong>nu</strong> (<em>float</em>) – poisson’s ratio</p></li>
+<li><p><strong>ldim</strong> (<em>list</em>) – plate dimensions in meters [Lx, Ly, Lz], where Lz is thickness</p></li>
+<li><p><strong>BCs</strong> (<em>np.ndarray</em>) – boundary conditions as a numpy array of 4 rows and 2 columns.
+The first column represents the transversal condition and the second
+column the rotational condition. e.g. BCs = np.zeros(4,2) would be a
+free conditions</p></li>
+<li><p><strong>sig</strong> (<em>list</em>) – A 2 element list representing frerquency dependant loss
+coefficients where T60 = 3*log(10)./(sig[0]+Om.^2*sig[1])</p></li>
+<li><p><strong>maxFreq</strong> (<em>float</em>) – Maximum frequency to consider when creating the simulation</p></li>
+<li><p><strong>pos</strong> – dictionary of input output coordinates. Expectes the keys</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="s1">&#39;in&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span>
+<span class="linenos">3</span>    <span class="s1">&#39;l&#39;</span><span class="p">:</span>  <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span>
+<span class="linenos">4</span>    <span class="s1">&#39;r&#39;</span><span class="p">:</span>  <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+<span class="linenos">5</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>velocity and displacement impulse responses</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of class: numpy.ndarray</p>
+</dd>
+</dl>
+<p>The x and y are normalised coefficientsa that should be greater than 0 and
+less than 1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – Time in seconds of the simulation</p></li>
+<li><p><strong>fs</strong> – sampling rate of the ouput</p></li>
+<li><p><strong>AmpF</strong> – amplitude of the input force</p></li>
+<li><p><strong>twid</strong> – length in seconds of the input force</p></li>
+<li><p><strong>file_path</strong> – output .wav  file path</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[velocity, displacement] where velocity is the output velocity
+signal and displacement is the output displacement signal. Both output
+signals are returned as numpy arrays</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+
+<span class="n">rho</span> <span class="o">=</span> <span class="mi">8765</span>  <span class="c1"># -- density [kg/m^3]</span>
+<span class="n">E</span> <span class="o">=</span> <span class="mf">101e9</span>  <span class="c1"># -- Young&#39;s mod [Pa]</span>
+<span class="n">nu</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># -- poisson&#39;s ratio</span>
+
+<span class="n">ldim</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.151</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.81e-3</span><span class="p">]</span>
+
+<span class="c1"># elastic constants around the edges (this allows to set the various bcs)</span>
+<span class="n">BCs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e15</span>  <span class="c1"># -- elastic constants around the edges</span>
+<span class="n">BCs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1e15</span>
+
+<span class="n">sig</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5e-3</span><span class="p">,</span> <span class="mf">3e-9</span><span class="p">]</span>  <span class="c1"># -- damping parameters: T60 = 3*log(10)./(sig0+Om.^2*sig1)</span>
+
+<span class="n">maxFreq</span> <span class="o">=</span> <span class="mf">15000.0</span>  <span class="c1"># max frequency to consider in hz</span>
+
+<span class="c1"># -- input / output locations, FRACTIONS of [Lx Ly] (values must be &gt;0 and &lt;1)</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;in&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.54</span><span class="p">,</span> <span class="mf">0.78</span><span class="p">],</span>
+    <span class="s1">&#39;l&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.57</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span>
+    <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.56</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">simulation_time</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">audio</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">modal_time_integration</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">ldim</span><span class="p">,</span> <span class="n">BCs</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">maxFreq</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">simulation_time</span><span class="p">)</span>
+<span class="n">norm_gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">audio</span> <span class="o">/=</span> <span class="n">norm_gain</span>
+<span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="mi">44100</span><span class="p">)</span>
+
+<span class="n">sleep</span><span class="p">(</span><span class="n">simulation_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="magpie.youngcalc">
+<span class="sig-prename descclassname"><span class="pre">magpie.</span></span><span class="sig-name descname"><span class="pre">youngcalc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BCs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExpFreq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntrain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">should_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#magpie.youngcalc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate Young’s modulus (E) of an experimental plate starting from a batch
+of experimentally measured frequencies, leveraging MAGPIE</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<em>float</em>) – the experimental plate density</p></li>
+<li><p><strong>ldim</strong> (<em>list</em>) – a 3 x 1 array containing the Lx Ly Lz dimensions</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – the grid spacing of the FD scheme</p></li>
+<li><p><strong>BCs</strong> (<em>np.array</em>) – a 4 x 2 array containing the rigidities of the boundary supports of the experimental plate</p></li>
+<li><p><strong>ExpFreq</strong> (<em>np.array</em>) – an array contaning the first Nmodes measured modal frequencies</p></li>
+<li><p><strong>Ntrain</strong> (<em>int</em>) – an integer. Must be &lt;= Nmodes. It is the number of training modes out of the available batch</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The estimated young’s modulus for the given plate</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ExpFreq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">73.2</span> <span class="mi">148</span> <span class="mi">376</span> <span class="mi">431</span> <span class="mi">559</span> <span class="mi">910</span><span class="p">]</span>   <span class="c1">#-- these are measured from a plate</span>
+<span class="n">rho</span>     <span class="o">=</span> <span class="mi">8765</span>             <span class="c1">#-- density [kg/(m ** 3)]</span>
+<span class="n">Lx</span>      <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">Ly</span>      <span class="o">=</span> <span class="mf">0.08</span>
+<span class="n">Lz</span>      <span class="o">=</span> <span class="mf">0.00081</span>
+<span class="n">BCs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mf">1e15</span><span class="p">,</span><span class="mf">1e15</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],])</span>
+
+<span class="n">ldim</span>    <span class="o">=</span> <span class="p">[</span><span class="n">Lx</span> <span class="n">Ly</span> <span class="n">Lz</span><span class="p">]</span>
+<span class="n">h</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Lx</span><span class="o">*</span><span class="n">Ly</span><span class="p">)</span><span class="o">*</span><span class="mf">0.01</span>   <span class="c1">#-- grid spacing [m]</span>
+
+<span class="n">E</span>  <span class="o">=</span> <span class="n">youngcalc</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">ldim</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">BCs</span><span class="p">,</span> <span class="n">ExpFreq</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">magpie-python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, NEMUS.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
