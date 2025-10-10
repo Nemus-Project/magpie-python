@@ -61,6 +61,9 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     K0y, R0y, Kx0, Rx0, KLy, RLy,KxL, RxL = BCs.flatten()
     Nx, Ny = Nxy
 
+    Nx += 1 
+    Ny += 1
+    
     D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
     ## MATRIX BUILDER
 
