@@ -1,5 +1,11 @@
 import numpy as np
 from scipy.sparse import *
+from petsc4py import PETSc
+from slepc4py import SLEPc
+import struct
+import time
+from tqdm import tqdm
+
 
 try:
     from Dxx_coeffs import *
@@ -66,8 +72,7 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
     
     D = E * (Lz ** 3) / 12 / (1 - (nu ** 2))
     ## MATRIX BUILDER
-
-    ##--- build matrix in blocks
+    
     a0 = np.ones((Ny - 0))
     a1 = np.ones((Ny - 1))
     a2 = np.ones((Ny - 2))
@@ -317,7 +322,7 @@ def bhmat(BCs: np.ndarray, Nxy: np.ndarray, h: float, Lz: float, E: float, nu: f
                      range(Nx-4)],
                    [*[None] * (Nx - 4), BlkMm1Mm3, BlkMm1Mm2, BlkMm1Mm1, BlkMm1M],
                    [*[None] * (Nx - 3), BlkMMm2, BlkMMm1, BlkMM]
-                   ], format=format)
+                   ], format=format, dtype=np.float64)
 
     return biharm / (h ** 4)
 
@@ -329,12 +334,258 @@ def main():
     nu = 0.3  # -- poisson's ratio
     h = np.sqrt(Lx * Ly) * 0.01  # -- grid spacing
     BCs = np.ones((4, 2)) * 1e15  # -- elastic constants around the edges
-
+    
     Nx = 250
     Ny = 250
 
-    biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)
+    biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu)    
+
+
+# def monitor(EPS, iteration, eigenvalue, residual, error):
+#     print(f"Iteration {iteration}: eigenvalue {value} with residual {residual}")
+
+
+def biharm_to_csv(biHarm):
+    # Convert to dense array (includes zeros)
+    dense = biHarm.toarray()
+    # Save to CSV
+    np.savetxt("matrix_new.csv", dense, delimiter=",",fmt='%.1f')
+
+
+def save_to_binary(filename, hz_list):
+    with open(filename+".bin", "wb") as f:
+        for v in hz_list:
+            f.write(struct.pack('d', v))  # 'd' = double precision float
+
+def gen_eigs():
+ 
+    Lx = 1.1000
+    Ly = 0.800
+    Lz = 5.0e-3
+
+    E = 9e+9  # -- Young's mod [Pa]
+    nu = 0.3  # -- poisson's ratio    
+    rho  = 8765
+    D = E * (Lz**3) / 12 / (1 - (nu**2));
+    
+    BCs = np.ones((4, 2)) * 1e15  # -- elastic constants around the edges
+    # BCs[:,1] = 0
+    # BCs = np.zeros((4,2));
+    # BCs[1,:] = 1e15
+    
+    Nmodes = 500
+    h  = np.sqrt(Lx*Ly)*10e-3;
+    Nx = int(np.floor(Lx/h));
+    Ny = int(np.floor(Ly/h));
+
+    print(h)
+    # h = Lx / Nx;
+    # Nx = 100
+    # Ny = 80
+
+    biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu, format='csr')    
+    # biharm_to_csv(biHarm) 
+    # print(biHarm.data)
+    print("start")
+    Dm, _ = linalg.eigsh(biHarm, k=Nmodes, sigma=0.0, which='LM', maxiter=300, tol=1e-14)
+    Om    = np.sqrt(np.abs(Dm))*np.sqrt(D/rho/Lz) ;
+    freqs = Om / (2*np.pi)
+    print(freqs[:20])
+    
+    save_to_binary('scipy_eigs',freqs)
+    
+    # Create PETSc matrix
+    A_petsc = PETSc.Mat().createAIJ(size=biHarm.shape, csr=(biHarm.indptr, biHarm.indices, biHarm.data))
+
+    # Create the SLEPc eigenproblem solver
+    E = SLEPc.EPS().create()
+    E.setOperators(A_petsc)
+    E.setProblemType(SLEPc.EPS.ProblemType.HEP)  # generalized or standard
+    E.getST().setType(SLEPc.ST.Type.SINVERT)
+    E.setTolerances(tol=1e-14, max_it=300)
+    E.getST().setShift(0.0)  # your shift
+    E.setDimensions(nev=Nmodes)  # number of eigenvalues to compute
+
+    # Optional: select Krylov-Schur method
+    E.setType(SLEPc.EPS.Type.KRYLOVSCHUR)
+    E.setTarget(0.0)
+        
+    print("Start")
+    # E.setMonitor(monitor)
+    
+    # Solve
+    E.solve()
+
+    # Extract eigenvalues
+    nconv = E.getConverged()
+    Dm = np.asarray([E.getEigenvalue(i) for i in range(nconv)],dtype=np.float64)
+    Om    = np.sqrt(np.abs(Dm))*np.sqrt(D/rho/Lz) ;
+    freqs = Om / (2*np.pi)
+    save_to_binary('slepc_eigs_hep',freqs)
+    print(freqs)
+    
+    
+    
+    E = SLEPc.EPS().create()
+    E.setOperators(A_petsc)    
+    E.setProblemType(SLEPc.EPS.ProblemType.GHEP)  # generalized or standard    
+    E.getST().setType(SLEPc.ST.Type.SINVERT)
+    E.setTolerances(tol=1e-14, max_it=300)
+    E.getST().setShift(0.0)  # your shift
+    E.setDimensions(nev=Nmodes)  # number of eigenvalues to compute
+
+    # Optional: select Krylov-Schur method
+    E.setType(SLEPc.EPS.Type.KRYLOVSCHUR)
+    E.setTarget(0.0)
+        
+    print("Start")
+    # E.setMonitor(monitor)
+    
+    # Solve
+    E.solve()
+    
+       # Extract eigenvalues
+    nconv = E.getConverged()
+    Dm = np.asarray([E.getEigenvalue(i) for i in range(nconv)],dtype=np.float64)
+    Om    = np.sqrt(np.abs(Dm))*np.sqrt(D/rho/Lz) ;
+    freqs = Om / (2*np.pi)
+    save_to_binary('slepc_eigs_ghep',freqs)
+    print(freqs)
+
+def benchmark():
+     
+    Lx = 1.1000
+    Ly = 0.800
+    Lz = 5.0e-3
+
+    E = 9e+9  # -- Young's mod [Pa]
+    nu = 0.3  # -- poisson's ratio    
+    rho  = 8765
+    D = E * (Lz**3) / 12 / (1 - (nu**2));
+    
+    BCs = np.ones((4, 2)) * 1e15  # -- elastic constants around the edges
+    # BCs[:,1] = 0
+    # BCs = np.zeros((4,2));
+    # BCs[1,:] = 1e15
+    
+    
+    h  = np.sqrt(Lx*Ly)*1e-2;
+    Nx = int(np.floor(Lx/h));
+    Ny = int(np.floor(Ly/h));
+
+    print(h)
+
+    biHarm = bhmat(BCs, [Nx, Ny], h, Lz, E, nu, format='csr')    
+    print("start")
+    
+    print((Nx, Ny))
+    
+    
+    Nmodes = 500
+    
+    times = []
+    
+    for Nm in tqdm(range(10,510,10), desc="Processing SciPy"):
+        start = time.time()
+        Dm, _ = linalg.eigsh(biHarm, k=Nm, sigma=0.0, which='LM', maxiter=300, tol=1e-14)
+        elapsed = time.time() - start
+        times.append(elapsed)
+        
+    
+    save_to_binary('scipy_eigs_times', times)
+    
+    # Create PETSc matrix
+    A_petsc = PETSc.Mat().createAIJ(size=biHarm.shape, csr=(biHarm.indptr, biHarm.indices, biHarm.data))
+
+
+    times = []
+    
+    for Nm in tqdm(range(10,510,10), desc="Processing SLEPc HEP"):
+        start = time.time()        
+        E = SLEPc.EPS().create()
+        E.setOperators(A_petsc)
+        E.setProblemType(SLEPc.EPS.ProblemType.HEP)  # generalized or standard
+        E.getST().setType(SLEPc.ST.Type.SINVERT)
+        E.setTolerances(tol=1e-14, max_it=300)
+        E.getST().setShift(0.0)  # your shift
+        E.setDimensions(nev=Nm)  # number of eigenvalues to compute
+        
+        # Optional: select Krylov-Schur method
+        E.setType(SLEPc.EPS.Type.KRYLOVSCHUR)
+        E.setTarget(0.0)
+        # Solve
+        E.solve()      
+        elapsed = time.time() - start
+        times.append(elapsed)
+          
+    save_to_binary('slepc_hep_times', times)
+    
+    times = []
+    
+     # Create the SLEPc eigenproblem solver
+    for Nm in tqdm(range(10,510,10), desc="Processing SLEPc GHEP"):
+        start = time.time()
+        
+        E = SLEPc.EPS().create()
+        E.setOperators(A_petsc)
+        E.setProblemType(SLEPc.EPS.ProblemType.HEP)  # generalized or standard
+        E.getST().setType(SLEPc.ST.Type.SINVERT)
+        E.setTolerances(tol=1e-14, max_it=300)
+        E.getST().setShift(0.0)  # your shift
+        E.setDimensions(nev=Nm)  # number of eigenvalues to compute
+
+        # Optional: select Krylov-Schur method
+        E.setType(SLEPc.EPS.Type.KRYLOVSCHUR)
+        E.setTarget(0.0)
+        
+        # Solve
+        E.solve()  
+    
+        elapsed = time.time() - start
+        times.append(elapsed)
+          
+    save_to_binary('slepc_ghep_times', times)
+    
+    
+
+    # # Extract eigenvalues
+    # nconv = E.getConverged()
+    # Dm = np.asarray([E.getEigenvalue(i) for i in range(nconv)],dtype=np.float64)
+    # Om    = np.sqrt(np.abs(Dm))*np.sqrt(D/rho/Lz) ;
+    # freqs = Om / (2*np.pi)
+    # save_to_binary('slepc_eigs_hep',freqs)
+    # print(freqs)
+    
+    
+    
+    # E = SLEPc.EPS().create()
+    # E.setOperators(A_petsc)    
+    # E.setProblemType(SLEPc.EPS.ProblemType.GHEP)  # generalized or standard    
+    # E.getST().setType(SLEPc.ST.Type.SINVERT)
+    # E.setTolerances(tol=1e-14, max_it=300)
+    # E.getST().setShift(0.0)  # your shift
+    # E.setDimensions(nev=Nmodes)  # number of eigenvalues to compute
+
+    # # Optional: select Krylov-Schur method
+    # E.setType(SLEPc.EPS.Type.KRYLOVSCHUR)
+    # E.setTarget(0.0)
+        
+    # print("Start")
+    # # E.setMonitor(monitor)
+    
+    # # Solve
+    # E.solve()
+    
+    #    # Extract eigenvalues
+    # nconv = E.getConverged()
+    # Dm = np.asarray([E.getEigenvalue(i) for i in range(nconv)],dtype=np.float64)
+    # Om    = np.sqrt(np.abs(Dm))*np.sqrt(D/rho/Lz) ;
+    # freqs = Om / (2*np.pi)
+    # save_to_binary('slepc_eigs_ghep',freqs)
+    # print(freqs)
 
 
 if __name__ == '__main__':
-    main()
+    
+    # gen_eigs()
+    benchmark()
